@@ -1,0 +1,47 @@
+/*
+  FONT ASLI DESAIN
+  ----------------
+  Desain memakai font berlisensi: "Awesome Serif" (Light Extra Tall & Bold Regular),
+  "Margelin" (Regular & Italic), dan "JaneAusten".
+  Selama file font belum ada, halaman memakai pengganti dari Google Fonts
+  (Instrument Serif, Jost, Pinyon Script) yang sudah diatur di css/style.css.
+
+  Cara mengaktifkan font asli:
+  1. Konversi file .otf/.ttf ke .woff2 (mis. https://cloudconvert.com/otf-to-woff2)
+  2. Simpan di assets/fonts/ dengan nama seperti di bawah
+  3. Hapus tanda komentar (/* ... * /) pada blok @font-face berikut
+*/
+
+/*
+@font-face {
+  font-family: "Awesome Serif";
+  src: url("../assets/fonts/AwesomeSerif-LightExtraTall.woff2") format("woff2");
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Awesome Serif Bold";
+  src: url("../assets/fonts/AwesomeSerif-BoldRegular.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Margelin";
+  src: url("../assets/fonts/Margelin-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Margelin";
+  src: url("../assets/fonts/Margelin-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JaneAusten";
+  src: url("../assets/fonts/JaneAusten.woff2") format("woff2");
+  font-display: swap;
+}
+*/

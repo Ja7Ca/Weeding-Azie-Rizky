@@ -1,0 +1,11 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="mdi-light:minus">
+<path id="Vector" d="M3.75 9.75V9H13.5V9.75H3.75Z" fill="url(#paint0_linear_0_9)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_9" x1="3.75" y1="9.375" x2="13.5" y2="9.375" gradientUnits="userSpaceOnUse">
+<stop stop-color="#DDBE9B"/>
+<stop offset="1" stop-color="#776653"/>
+</linearGradient>
+</defs>
+</svg>

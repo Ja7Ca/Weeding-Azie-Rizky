@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>The Wedding of Azie &amp; Rizky · 17.01.2027</title>
+  <meta name="description" content="Undangan pernikahan Azie Melasari &amp; Rizky Hari Fernanda — Minggu, 17 Januari 2027.">
+  <meta name="theme-color" content="#4d0307">
+
+  <!-- Preview saat link dibagikan di WhatsApp. Ganti og:url & og:image dengan URL hosting final. -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="The Wedding of Azie &amp; Rizky">
+  <meta property="og:description" content="Minggu, 17 Januari 2027 · Kami mengundang Anda untuk hadir di hari bahagia kami.">
+  <meta property="og:image" content="assets/img/footer-photo.webp">
+
+  <!-- Font pengganti sementara (disimpan lokal). Font asli diaktifkan di css/fonts.css -->
+  <link rel="preload" href="assets/fonts/fallback/PinyonScript-normal-3.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/fallback/InstrumentSerif-normal-0.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- Foto mempelai diunduh sejak awal (saat amplop masih tertutup) -->
+  <link rel="preload" href="assets/img/gallery/g11.webp" as="image" fetchpriority="high">
+  <link rel="preload" href="assets/img/groom-placeholder.webp" as="image" fetchpriority="high">
+  <link rel="stylesheet" href="css/fallback-fonts.css">
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- elemen hero disembunyikan dulu sampai animasi pembuka siap (cegah "kedip" sebelum JS jalan) -->
+  <script>
+    document.documentElement.classList.add("js-anim");
+    // pengaman: bila skrip animasi gagal dimuat, isi hero tetap muncul setelah 4 detik
+    setTimeout(function () { document.documentElement.classList.remove("js-anim"); }, 4000);
+  </script>
+</head>
+<body>
+
+  <!-- ============ AMPLOP (placeholder — desain final menyusul) ============
+       Dimatikan lewat showEnvelope di js/config.js sampai desain amplop siap. -->
+  <div class="envelope" id="envelope" role="dialog" aria-label="Buka undangan" hidden>
+    <div class="envelope__body">
+      <div class="envelope__back"></div>
+      <div class="envelope__pocket"></div>
+      <div class="envelope__flap"></div>
+      <button class="envelope__seal" id="openInvitation" type="button" aria-label="Buka undangan">
+        <img src="assets/img/monogram.svg" alt="">
+      </button>
+    </div>
+    <p class="envelope__hint">Ketuk untuk membuka</p>
+  </div>
+
+  <main class="page" id="page">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="hero">
+      <img class="d hero__top-leaf" data-leaf src="assets/img/hero-top-spotted-leaf.webp" alt="">
+      <img class="d hero__bl-foliage" data-leaf src="assets/img/hero-bottom-left-foliage.webp" alt="">
+
+      <div class="hero__scroll" data-hero="scroll">
+        <p>scroll<br>to open</p>
+        <span class="hero__scroll-line"></span>
+      </div>
+
+      <div class="hero__content">
+        <div class="hero__group">
+          <p class="overline" data-hero="overline">The Wedding of</p>
+          <div class="names">
+            <span class="names__word gt" data-hero="azie">Azie</span>
+            <span class="names__amp" data-hero="amp"><span class="gt">&amp;</span></span>
+            <span class="names__word gt" data-hero="rizky">Rizky</span>
+          </div>
+          <p class="overline" data-hero="date">17 · 01 · 2027</p>
+        </div>
+        <div class="hero__group hero__guest">
+          <p class="overline" data-hero="kepada">Kepada Yth.</p>
+          <p class="hero__guest-name gt" id="guestName" data-hero="guest">Tamu Undangan</p>
+          <img class="hero__dots" src="assets/img/hero-dotted-line.svg" alt="" data-hero="dots">
+        </div>
+      </div>
+
+      <div class="d hero__poppy" data-flower><div class="hero__poppy-img"></div></div>
+      <img class="d hero__right-foliage" data-leaf src="assets/img/hero-right-foliage.webp" alt="">
+      <div class="d hero__bell hero__bell--1" data-flower><div class="hero__bell-inner"><img src="assets/img/hero-bellflower-source.webp" alt=""></div></div>
+      <div class="d hero__bell hero__bell--2" data-flower><div class="hero__bell-inner"><img src="assets/img/hero-bellflower-source.webp" alt=""></div></div>
+      <img class="d hero__lower-leaf" data-leaf src="assets/img/hero-lower-leaf-group.webp" alt="">
+      <img class="d hero__rb-bell" data-flower src="assets/img/hero-right-bottom-bell.webp" alt="">
+      <img class="d hero__lower-spotted" data-leaf src="assets/img/hero-lower-spotted-leaves.webp" alt="">
+      <img class="d hero__left-leaf" data-leaf src="assets/img/hero-left-large-leaf.webp" alt="">
+      <img class="d hero__lily" data-flower src="assets/img/hero-pink-lily.webp" alt="">
+    </section>
+
+    <!-- ============ Q.S. AR-RUM : 21 ============ -->
+    <section class="ayat">
+      <div class="scallop" data-soft="card">
+        <div class="scallop__fill"></div>
+        <img class="scallop__border scallop__border--outer" src="assets/img/scallop-border-outer.svg" alt="">
+        <img class="scallop__border scallop__border--inner" src="assets/img/scallop-border-inner.svg" alt="">
+      </div>
+      <div class="ayat__text">
+        <p class="ayat__title" data-soft="text">Q.S. Ar-Rum : 21</p>
+        <p class="ayat__quote" data-soft="text">“Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.”</p>
+      </div>
+    </section>
+
+    <!-- ============ MEMPELAI ============ -->
+    <section class="mempelai">
+      <div class="green-card mempelai__card" data-reveal="card">
+        <div class="green-card__pattern"></div>
+        <span class="green-card__line green-card__line--1"></span>
+        <span class="green-card__line green-card__line--2"></span>
+
+        <p class="overline mempelai__title" data-reveal="up">Mempelai yang Berbahagia</p>
+
+        <p class="mempelai__ghost mempelai__ghost--1" data-reveal="ghost">Azie</p>
+        <div class="oval mempelai__oval--1" data-reveal="oval">
+          <img class="oval__ring1" src="assets/img/oval-ring-1.svg" alt="">
+          <img class="oval__ring2" src="assets/img/oval-ring-2.svg" alt="">
+          <img class="oval__ring3" src="assets/img/oval-ring-3.svg" alt="">
+          <div class="oval__photo"><img class="bride-photo" src="assets/img/gallery/g11.webp" alt="Azie Melasari"></div>
+        </div>
+        <img class="mempelai__ribbon mempelai__ribbon--1" data-sway src="assets/img/ribbon-right.webp" alt="">
+        <div class="mempelai__person mempelai__person--1">
+          <p class="mempelai__name gt" data-reveal="up">Azie Melasari, S.Kom</p>
+          <p class="mempelai__parents" data-reveal="up">Putri dari Bapak Rustamaji &amp; Ibu Tina Susanti</p>
+        </div>
+
+        <div class="mempelai__amp" data-reveal="amp"><span class="gt">&amp;</span></div>
+        <span class="mempelai__amp-line" data-reveal="line"></span>
+
+        <p class="mempelai__ghost mempelai__ghost--2" data-reveal="ghost">Haep</p>
+        <div class="oval mempelai__oval--2" data-reveal="oval">
+          <img class="oval__ring1" src="assets/img/oval-ring-1.svg" alt="">
+          <img class="oval__ring2" src="assets/img/oval-ring-2.svg" alt="">
+          <img class="oval__ring3" src="assets/img/oval-ring-3.svg" alt="">
+          <!-- TODO: ganti dengan ekspor foto asli (layer "REYY0590 3") -->
+          <div class="oval__photo"><img class="groom-photo" src="assets/img/groom-placeholder.webp" alt="Rizky Hari Fernanda"></div>
+        </div>
+        <img class="mempelai__ribbon mempelai__ribbon--2" data-sway src="assets/img/ribbon-right.webp" alt="">
+        <div class="mempelai__person mempelai__person--2">
+          <p class="mempelai__name gt" data-reveal="up">Dr. Rizky Hari Fernanda, S.Ked</p>
+          <p class="mempelai__parents" data-reveal="up">Putra dari Bapak Haryono &amp; Ibu Suryani</p>
+        </div>
+      </div>
+      <div class="d dw mempelai__leaves"><img data-parallax="-0.08" src="assets/img/lily-right-leaves.webp" alt=""></div>
+    </section>
+
+    <!-- ============ ACARA ============ -->
+    <section class="acara">
+      <div class="acara__card" data-reveal="card">
+        <div class="acara__paper"></div>
+        <span class="acara__inner-border"></span>
+        <div class="acara__content">
+          <div class="event">
+            <div class="event__head">
+              <h2 class="event__title" data-reveal="up">Akad Nikah</h2>
+              <div class="event__when" data-reveal="up">
+                <p class="event__date">Jumat, 15 Januari 2027</p>
+                <p class="event__time">Pukul: 08.00 WIB - Selesai</p>
+                <p class="event__badge">Private (Family only)</p>
+              </div>
+            </div>
+            <div class="sketch sketch--masjid" data-reveal="sketch"><img src="assets/img/sketch-masjid.webp" alt="Sketsa Masjid Raya Sheikh Zayed Solo"></div>
+            <div class="event__venue" data-reveal="up">
+              <div>
+                <p class="event__place">Masjid Raya Sheikh Zayed Solo</p>
+                <p class="event__address">Jl. Ahmad Yani No.128, Gilingan,<br>Kec. Banjarsari, Kota Surakarta</p>
+              </div>
+              <a class="event__map" data-map="akad" href="#" target="_blank" rel="noopener">VIEW MAP</a>
+            </div>
+          </div>
+
+          <img class="acara__divider" src="assets/img/divider-line.svg" alt="" data-reveal="line">
+
+          <div class="event">
+            <div class="event__head">
+              <h2 class="event__title" data-reveal="up">Resepsi</h2>
+              <div class="event__when" data-reveal="up">
+                <p class="event__date">Minggu, 17 Januari 2027</p>
+                <p class="event__time">Pukul: 09:00 - 11.00 WIB</p>
+              </div>
+            </div>
+            <div class="sketch sketch--gedung" data-reveal="sketch"><img src="assets/img/sketch-gedung.webp" alt="Sketsa Gedung IPHI Nglorog Sragen"></div>
+            <div class="event__venue" data-reveal="up">
+              <div>
+                <p class="event__place">Gedung IPHI Nglorog Sragen</p>
+                <p class="event__address">Ngrandu, Nglorog, Kec. Sragen,<br>Kabupaten Sragen</p>
+              </div>
+              <a class="event__map" data-map="resepsi" href="#" target="_blank" rel="noopener">VIEW MAP</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d dw acara__leaf-1"><img data-leaf-sway src="assets/img/leaf-topmost.webp" alt=""></div>
+      <div class="d acara__leaf-2"><img data-leaf-sway src="assets/img/leaf-topmost.webp" alt=""></div>
+      <div class="d dw acara__leaf-group"><img data-leaf-sway src="assets/img/leaf-group-top-right.webp" alt=""></div>
+      <img class="d acara__bell" data-sway src="assets/img/bellflower-branch.webp" alt="">
+      <div class="d acara__lily"><img data-sway src="assets/img/lily-branch.webp" alt=""></div>
+    </section>
+
+    <!-- ============ LOVE STORY ============ -->
+    <section class="story">
+      <div class="story__head">
+        <p class="overline-sm" data-reveal="up">Love Story</p>
+        <h2 class="section-title gt" data-reveal="up">Four chapters,<br>twelve years.</h2>
+      </div>
+      <!-- Empat chapter ditumpuk; saat di-scroll, chapter berikutnya naik menutupi yang sebelumnya -->
+      <div class="story__stack" data-reveal="card">
+        <article class="story__card" data-chapter="0">
+          <div class="story__texture"></div>
+          <span class="story__inner-border"></span>
+          <div class="story__sparkles" aria-hidden="true"></div>
+          <div class="chapter">
+            <div class="chapter__meta"><span>CHAPTER ONE</span><i></i><span>2015</span></div>
+            <h3 class="chapter__title gt">The Corridor</h3>
+            <p class="chapter__text">Kami pertama kali saling mengenal di sebuah SMA di Sragen, meski berbeda kelas. Pada 2016, jalan kami berpisah.</p>
+          </div>
+          <span class="story__dim"></span>
+        </article>
+        <article class="story__card" data-chapter="1">
+          <div class="story__texture"></div>
+          <span class="story__inner-border"></span>
+          <div class="story__sparkles" aria-hidden="true"></div>
+          <div class="chapter">
+            <div class="chapter__meta"><span>CHAPTER TWO</span><i></i><span>2016 – 2025</span></div>
+            <h3 class="chapter__title gt">A Café in Solo</h3>
+            <p class="chapter__text">Hampir sepuluh tahun kami menempuh pendidikan dan menata masa depan masing-masing. Hingga pada 2025, kami dipertemukan kembali di sebuah kafe di Solo dan sepakat melanjutkan kisah yang sempat terhenti.</p>
+          </div>
+          <span class="story__dim"></span>
+        </article>
+        <article class="story__card" data-chapter="2">
+          <div class="story__texture"></div>
+          <span class="story__inner-border"></span>
+          <div class="story__sparkles" aria-hidden="true"></div>
+          <div class="chapter">
+            <div class="chapter__meta"><span>CHAPTER THREE</span><i></i><span>2026</span></div>
+            <h3 class="chapter__title gt">The Engagement</h3>
+            <p class="chapter__text">Sebagai langkah menuju jenjang yang lebih serius, kami melangsungkan pertunangan pada 29 Maret 2026.</p>
+          </div>
+          <span class="story__dim"></span>
+        </article>
+        <article class="story__card" data-chapter="3">
+          <div class="story__texture"></div>
+          <span class="story__inner-border"></span>
+          <div class="story__sparkles" aria-hidden="true"></div>
+          <div class="chapter">
+            <div class="chapter__meta"><span>A NEW CHAPTER</span><i></i><span>2027</span></div>
+            <h3 class="chapter__title gt">Home</h3>
+            <p class="chapter__text">Dengan penuh rasa syukur kepada Allah SWT, kami akan mengikat janji suci pernikahan pada 15 Januari 2027. Semoga menjadi awal keluarga yang sakinah, mawaddah, warahmah. Aamiin</p>
+          </div>
+          <span class="story__dim"></span>
+        </article>
+      </div>
+      <img class="story__ribbon story__ribbon--l" data-sway src="assets/img/ribbon-left.webp" alt="">
+      <img class="story__ribbon story__ribbon--r" data-sway src="assets/img/ribbon-right.webp" alt="">
+    </section>
+
+    <!-- ============ GALLERY ============ -->
+    <section class="gallery">
+      <div class="d dw gallery__lily-leaves"><img data-sway src="assets/img/lily-right-leaves.webp" alt=""></div>
+      <div class="d dw gallery__lily"><img data-sway src="assets/img/pink-lily-group.webp" alt=""></div>
+      <h2 class="section-title gt gallery__title" data-reveal="up">Our Gallery</h2>
+
+      <div class="gallery__viewport" id="galleryViewport">
+        <div class="gallery__track">
+          <figure class="photo photo--tall" style="--r:0deg"><img src="assets/img/gallery/g01.webp" alt="" loading="lazy"></figure>
+          <figure class="photo photo--wide" style="--r:-1deg"><img src="assets/img/gallery/g02.webp" alt="" loading="lazy"></figure>
+          <figure class="photo photo--square" style="--r:-1deg"><img src="assets/img/gallery/g03.webp" alt="" loading="lazy"></figure>
+          <figure class="photo photo--std" style="--r:1deg"><img src="assets/img/gallery/g04.webp" alt="" loading="lazy"></figure>
+          <figure class="photo photo--std" style="--r:-2deg"><img src="assets/img/gallery/g05.webp" alt="" loading="lazy"></figure>
+          <figure class="photo photo--std" style="--r:2deg"><img src="assets/img/gallery/g06.webp" alt="" loading="lazy"></figure>
+          <figure class="photo photo--wide" style="--r:1deg"><img src="assets/img/gallery/g07.webp" alt="" loading="lazy"></figure>
+          <figure class="photo photo--square" style="--r:-1deg"><img src="assets/img/gallery/g08.webp" alt="" loading="lazy"></figure>
+          <figure class="photo photo--std" style="--r:-1deg"><img src="assets/img/gallery/g09.webp" alt="" loading="lazy"></figure>
+          <figure class="photo photo--wide" style="--r:-1deg"><img src="assets/img/gallery/g10.webp" alt="" loading="lazy"></figure>
+          <figure class="photo photo--std" style="--r:0deg"><img src="assets/img/gallery/g11.webp" alt="" loading="lazy"></figure>
+          <figure class="photo photo--wide" style="--r:-1deg"><img src="assets/img/gallery/g12.webp" alt="" loading="lazy"></figure>
+        </div>
+      </div>
+
+      <div class="gallery__controls" data-reveal="up">
+        <button class="circle-btn" id="galleryPrev" type="button" aria-label="Foto sebelumnya"><img src="assets/img/arrow-left.svg" alt=""></button>
+        <div class="gallery__progress"><span id="galleryThumb"></span></div>
+        <button class="circle-btn" id="galleryNext" type="button" aria-label="Foto berikutnya"><img src="assets/img/arrow-right.svg" alt=""></button>
+      </div>
+    </section>
+
+    <!-- ============ LIVE STREAMING ============ -->
+    <section class="live">
+      <div class="scallop" data-soft="card">
+        <div class="scallop__fill"></div>
+        <img class="scallop__border scallop__border--outer" src="assets/img/scallop-border-outer.svg" alt="">
+        <img class="scallop__border scallop__border--inner" src="assets/img/scallop-border-inner.svg" alt="">
+      </div>
+      <div class="live__text">
+        <div>
+          <p class="live__title" data-soft="text">Live streaming</p>
+          <p class="live__desc" data-soft="text">Temui kami secara virtual untuk menyaksikan acara pernikahan kami yang akan disiarkan langsung melalui chanel Youtube berikut:</p>
+        </div>
+        <a class="live__btn" id="youtubeLink" href="#" target="_blank" rel="noopener" data-soft="text">
+          <img src="assets/img/icon-youtube.svg" alt="">
+          <span>Live Youtube</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ KONFIRMASI KEHADIRAN ============ -->
+    <section class="rsvp" id="rsvp">
+      <div class="rsvp__card" data-reveal="card">
+        <span class="rsvp__inner-border"></span>
+        <div class="rsvp__content">
+          <div class="section-head">
+            <p class="overline-sm" data-reveal="up">Konfirmasi Kehadiran</p>
+            <h2 class="section-title gt" data-reveal="up">Will you join us?</h2>
+            <p class="section-desc" data-reveal="up">Kehadiranmu berarti besar bagi kami. Cukup satu ketukan di bawah ini tanpa ribet, tanpa perlu mengetik apa pun.</p>
+          </div>
+
+          <form class="rsvp__form" id="rsvpForm" novalidate>
+            <!-- Kolom nama hanya muncul bila link tidak memuat nama tamu (?to=...) -->
+            <input class="field rsvp__name" id="rsvpName" name="nama" type="text" placeholder="Nama" autocomplete="name" hidden>
+            <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+            <div class="counter" data-reveal="up">
+              <button class="circle-btn" type="button" id="countPlus" aria-label="Tambah jumlah orang"><img src="assets/img/icon-plus.svg" alt=""></button>
+              <div class="counter__value gt-wrap">
+                <span class="gt">Hadir</span>
+                <span class="counter__num gt" id="countValue">1</span>
+                <span class="gt">orang</span>
+              </div>
+              <button class="circle-btn" type="button" id="countMinus" aria-label="Kurangi jumlah orang"><img src="assets/img/icon-minus.svg" alt=""></button>
+            </div>
+
+            <div class="rsvp__actions" data-reveal="up">
+              <button class="btn btn--solid" type="submit" value="Hadir"><img src="assets/img/icon-check.svg" alt=""><span>Insyaallah Hadir</span></button>
+              <button class="btn btn--ghost" type="submit" value="Berhalangan"><span class="gt">Mohon maaf, berhalangan</span></button>
+            </div>
+          </form>
+
+          <div class="rsvp__done" id="rsvpDone" hidden>
+            <p class="rsvp__done-text" id="rsvpDoneText"></p>
+            <button class="rsvp__change" type="button" id="rsvpChange">Ubah jawaban</button>
+          </div>
+        </div>
+      </div>
+      <img class="d rsvp__poppy rsvp__poppy--l" data-sway src="assets/img/poppy-stem.webp" alt="">
+      <div class="d dw rsvp__poppy rsvp__poppy--r"><img data-sway src="assets/img/poppy-stem.webp" alt=""></div>
+      <div class="d rsvp__bloom-r"><img data-sway src="assets/img/rsvp-bloom-right.webp" alt=""></div>
+      <div class="d rsvp__bloom-l"><img data-sway src="assets/img/pink-lily-bloom.webp" alt=""></div>
+    </section>
+
+    <!-- ============ UCAPAN ============ -->
+    <section class="wishes">
+      <div class="wishes__content">
+        <div class="section-head">
+          <p class="overline-sm" data-reveal="up">Wishes &amp; Prayers</p>
+          <h2 class="section-title gt" data-reveal="up">Titipkan Doa Baikmu</h2>
+          <p class="section-desc wishes__desc" data-reveal="up">Satu dua kalimat darimu akan kami simpan, dan kami baca kembali jauh setelah hari itu berlalu.</p>
+        </div>
+        <form class="wishes__form" id="wishForm" novalidate data-reveal="up">
+          <div class="wishes__fields">
+            <input class="field" id="wishName" name="nama" type="text" placeholder="Nama" autocomplete="name" required maxlength="80">
+            <textarea class="field field--area" id="wishText" name="ucapan" placeholder="Tulis ucapan dan doa terbaikmu disini..." required maxlength="600"></textarea>
+            <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+          </div>
+          <button class="btn btn--solid btn--full" type="submit" id="wishSubmit"><span>Kirim ucapan</span></button>
+        </form>
+        <!-- Ucapan dari tamu (diambil dari Spreadsheet) -->
+        <div class="wish-list" id="wishList" hidden><ul class="wish-track" aria-live="polite"></ul></div>
+      </div>
+    </section>
+
+    <!-- ============ TANDA KASIH ============ -->
+    <section class="gift">
+      <div class="green-card gift__card" data-reveal="card">
+        <div class="green-card__pattern"></div>
+        <span class="green-card__line green-card__line--1"></span>
+        <span class="green-card__line green-card__line--2"></span>
+
+        <div class="gift__content">
+          <div class="gift__head">
+            <h2 class="section-title gt" data-reveal="up">Tanda Kasih</h2>
+            <p class="section-desc" data-reveal="up">Satu dua kalimat darimu akan kami simpan, dan kami baca kembali jauh setelah hari itu berlalu.</p>
+          </div>
+
+          <div class="gift__block">
+            <p class="tag" data-reveal="up">Amplop digital</p>
+            <div class="gift__accounts">
+              <div class="account" data-reveal="up">
+                <p class="account__label">Azie Melasari <i></i> BCA</p>
+                <div class="account__row">
+                  <p class="account__number">0771019900</p>
+                  <button class="copy-btn" type="button" data-copy="0771019900" aria-label="Salin nomor rekening Azie"></button>
+                </div>
+              </div>
+              <div class="account" data-reveal="up">
+                <p class="account__label">Rizky Hari F. <i></i> BCA</p>
+                <div class="account__row">
+                  <p class="account__number">0770512654</p>
+                  <button class="copy-btn" type="button" data-copy="0770512654" aria-label="Salin nomor rekening Rizky"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <span class="gift__divider" data-reveal="line"></span>
+
+          <div class="gift__block">
+            <p class="tag" data-reveal="up">Kirim hadiah</p>
+            <div class="address" data-reveal="up">
+              <p class="address__text" id="giftAddress">Perumahan Puri Pradana, No. A26, Blukukan Satu, Tohudan, Kec. Colomadu, Kabupaten Karanganyar, Jawa Tengah 57174. (Azie Melasari)</p>
+              <button class="copy-btn" type="button" data-copy-target="giftAddress" aria-label="Salin alamat"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d dw gift__leaf-1"><img data-leaf-sway src="assets/img/leaf-topmost.webp" alt=""></div>
+      <div class="d dw gift__leaf-2"><img data-leaf-sway src="assets/img/leaf-topmost.webp" alt=""></div>
+      <div class="d dw gift__leaves"><img data-sway src="assets/img/lily-right-leaves.webp" alt=""></div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="footer">
+      <div class="footer__photo">
+        <img class="footer__img" src="assets/img/footer-photo.webp" alt="Azie &amp; Rizky">
+        <img class="footer__monogram" src="assets/img/monogram.svg" alt="AR">
+        <p class="footer__date gt">17 · 01 · 2027</p>
+      </div>
+      <div class="footer__closing">
+        <p class="footer__thanks" data-reveal="up">Terima kasih telah menjadi bagian dari cerita kami,<br>sampai bertemu di hari bahagia besok!</p>
+        <img class="footer__divider" src="assets/img/footer-divider.svg" alt="" data-reveal="line">
+        <div class="footer__sign">
+          <p class="footer__kami" data-reveal="up">Kami yang berbahagia</p>
+          <div class="names names--footer" data-reveal="up">
+            <span class="names__word gt">Azie</span>
+            <span class="names__amp"><span class="gt">&amp;</span></span>
+            <span class="names__word gt">Rizky</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Library disimpan lokal (js/vendor) supaya tetap jalan walau CDN diblokir provider -->
+  <script src="js/vendor/gsap.min.js"></script>
+  <script src="js/vendor/ScrollTrigger.min.js"></script>
+  <script src="js/vendor/lenis.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

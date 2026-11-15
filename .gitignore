@@ -1,0 +1,16 @@
+# Aset mentah hasil ekspor Figma (±114 MB, tidak dipakai website)
+_figma-source/
+
+# Pengaturan lokal Claude Code / preview
+.claude/
+
+# Vercel CLI
+.vercel/
+
+# Sistem & editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.log
