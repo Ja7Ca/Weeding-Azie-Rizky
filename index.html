@@ -13,9 +13,10 @@
   <meta property="og:description" content="Minggu, 17 Januari 2027 · Kami mengundang Anda untuk hadir di hari bahagia kami.">
   <meta property="og:image" content="assets/img/footer-photo.webp">
 
-  <!-- Font pengganti sementara (disimpan lokal). Font asli diaktifkan di css/fonts.css -->
-  <link rel="preload" href="assets/fonts/fallback/PinyonScript-normal-3.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/fonts/fallback/InstrumentSerif-normal-0.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- Font asli desain (css/fonts.css) dimuat lebih awal untuk tampilan pembuka -->
+  <link rel="preload" href="assets/fonts/AwesomeSerif-LightExtraTall.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/Margelin-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/JaneAusten.woff2" as="font" type="font/woff2" crossorigin>
   <!-- Foto mempelai diunduh sejak awal (saat amplop masih tertutup) -->
   <link rel="preload" href="assets/img/gallery/g11.webp" as="image" fetchpriority="high">
   <link rel="preload" href="assets/img/groom-placeholder.webp" as="image" fetchpriority="high">
@@ -50,17 +51,21 @@
        Swipe up / scroll / ketuk → cover naik dan hero terbuka penuh. -->
   <div class="cover" id="cover" hidden>
     <!-- gambar "Kertas Cover" dari Figma, dipotong 3 bagian (+ isian) supaya pas di semua tinggi layar -->
+    <i class="cover__safe" id="coverSafe" aria-hidden="true"></i>
     <div class="cover__paper" id="coverPaper" aria-hidden="true">
       <i class="cover__cap"></i>
       <i class="cover__mid"></i>
       <i class="cover__top"></i>
+      <i class="cover__head"></i>
       <i class="cover__bottom"></i>
     </div>
     <button class="cover__cta" id="coverOpen" type="button" aria-label="Buka undangan">
       <span>Swipe up</span><i></i><span>to open</span>
     </button>
     <!-- Browser hanya mengizinkan musik setelah ketukan/klik (bukan swipe/scroll), jadi pakai tombol -->
-    <button class="cover__btn" id="coverBtn" type="button">Buka Undangan</button>
+    <div class="cover__actions" id="coverActions">
+      <button class="cover__btn" id="coverBtn" type="button">Buka Undangan</button>
+    </div>
   </div>
 
   <!-- Tombol musik (komponen "Music") -->
@@ -69,6 +74,16 @@
     <img class="music__disc music__disc--playing" src="assets/img/music-playing.webp" alt="">
   </button>
   <audio id="bgm" preload="none" loop></audio>
+
+  <!-- Detail foto galeri (frame "OUR GALLERY - Full") -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Foto galeri" hidden>
+    <button class="lightbox__close" type="button" aria-label="Tutup"></button>
+    <figure class="lightbox__stage">
+      <img class="lightbox__img" alt="">
+      <button class="lightbox__nav lightbox__nav--prev" type="button" aria-label="Foto sebelumnya"><img src="assets/img/arrow-left.svg" alt=""></button>
+      <button class="lightbox__nav lightbox__nav--next" type="button" aria-label="Foto berikutnya"><img src="assets/img/arrow-right.svg" alt=""></button>
+    </figure>
+  </div>
 
   <main class="page" id="page">
 
@@ -141,8 +156,8 @@
         </div>
         <img class="mempelai__ribbon mempelai__ribbon--1" data-sway src="assets/img/ribbon-right.webp" alt="">
         <div class="mempelai__person mempelai__person--1">
-          <p class="mempelai__name gt" data-reveal="up">Azie Melasari, S.Kom</p>
-          <p class="mempelai__parents" data-reveal="up">Putri dari Bapak Rustamaji &amp; Ibu Tina Susanti</p>
+          <p class="mempelai__name gt" data-reveal="up">Azie Melasari, S.Kom.</p>
+          <p class="mempelai__parents" data-reveal="up">Putri dari Bapak Rustamaji<br/>&amp; Ibu Tina Susanti</p>
         </div>
 
         <div class="mempelai__amp" data-reveal="amp"><span class="gt">&amp;</span></div>
@@ -158,8 +173,8 @@
         </div>
         <img class="mempelai__ribbon mempelai__ribbon--2" data-sway src="assets/img/ribbon-right.webp" alt="">
         <div class="mempelai__person mempelai__person--2">
-          <p class="mempelai__name gt" data-reveal="up">Dr. Rizky Hari Fernanda, S.Ked</p>
-          <p class="mempelai__parents" data-reveal="up">Putra dari Bapak Haryono &amp; Ibu Suryani</p>
+          <p class="mempelai__name gt" data-reveal="up">dr. Rizky Hari Fernanda.</p>
+          <p class="mempelai__parents" data-reveal="up">Putra dari <br/>Bapak Haryono, S.E. <br/>&amp; Ibu Suryani</p>
         </div>
       </div>
       <div class="d dw mempelai__leaves"><img data-parallax="-0.08" data-leaf-sway src="assets/img/lily-right-leaves.webp" alt=""></div>
@@ -190,7 +205,7 @@
             </div>
           </div>
 
-          <img class="acara__divider" src="assets/img/divider-line.svg" alt="" data-reveal="line">
+          <img class="acara__divider" src="assets/img/acara-divider.svg" alt="" data-reveal="line">
 
           <div class="event">
             <div class="event__head">
@@ -236,7 +251,7 @@
             <div class="chapter">
               <div class="chapter__meta"><span>CHAPTER ONE</span><i></i><span>2015</span></div>
               <h3 class="chapter__title gt">The Corridor</h3>
-              <p class="chapter__text">Kami pertama kali saling mengenal di sebuah SMA di Sragen, meski berbeda kelas. Pada 2016, jalan kami berpisah.</p>
+              <p class="chapter__text">Kami pertama kali saling mengenal di SMA di Sragen, meski berbeda kelas. Pada 2016, jalan kami berpisah.</p>
             </div>
             <span class="story__dim"></span>
           </article>
@@ -249,7 +264,7 @@
             <span class="story__inner-border"></span>
             <div class="story__sparkles" aria-hidden="true"></div>
             <div class="chapter">
-              <div class="chapter__meta"><span>CHAPTER TWO</span><i></i><span>2016 – 2025</span></div>
+              <div class="chapter__meta"><span>CHAPTER TWO</span><i></i><span>2025</span></div>
               <h3 class="chapter__title gt">A Café in Solo</h3>
               <p class="chapter__text">Hampir sepuluh tahun kami menempuh pendidikan dan menata masa depan masing-masing. Hingga pada 2025, kami dipertemukan kembali di sebuah kafe di Solo dan sepakat melanjutkan kisah yang sempat terhenti.</p>
             </div>
@@ -316,7 +331,6 @@
 
       <div class="gallery__controls" data-reveal="up">
         <button class="circle-btn" id="galleryPrev" type="button" aria-label="Foto sebelumnya"><img src="assets/img/arrow-left.svg" alt=""></button>
-        <div class="gallery__progress"><span id="galleryThumb"></span></div>
         <button class="circle-btn" id="galleryNext" type="button" aria-label="Foto berikutnya"><img src="assets/img/arrow-right.svg" alt=""></button>
       </div>
     </section>
@@ -408,51 +422,39 @@
 
     <!-- ============ TANDA KASIH ============ -->
     <section class="gift">
-      <div class="green-card gift__card" data-reveal="card">
-        <div class="green-card__pattern"></div>
-        <span class="green-card__line green-card__line--1"></span>
-        <span class="green-card__line green-card__line--2"></span>
+      <div class="gift__content">
+        <div class="gift__head">
+          <p class="gift__overline" data-reveal="up">Tanda Kasih</p>
+          <h2 class="gift__title" data-reveal="up">Kehadiranmu sudah<br>lebih dari cukup</h2>
+          <p class="gift__desc" data-reveal="up">Doa dan kehadiranmu adalah hadiah paling berharga bagi kami. Namun bila ingin berbagi tanda kasih, kami sediakan beberapa cara:</p>
+        </div>
 
-        <div class="gift__content">
-          <div class="gift__head">
-            <h2 class="section-title gt" data-reveal="up">Tanda Kasih</h2>
-            <p class="section-desc" data-reveal="up">Satu dua kalimat darimu akan kami simpan, dan kami baca kembali jauh setelah hari itu berlalu.</p>
-          </div>
-
-          <div class="gift__block">
-            <p class="tag" data-reveal="up">Amplop digital</p>
-            <div class="gift__accounts">
-              <div class="account" data-reveal="up">
-                <p class="account__label">Azie Melasari <i></i> BCA</p>
-                <div class="account__row">
-                  <p class="account__number">0771019900</p>
-                  <button class="copy-btn" type="button" data-copy="0771019900" aria-label="Salin nomor rekening Azie"></button>
-                </div>
-              </div>
-              <div class="account" data-reveal="up">
-                <p class="account__label">Rizky Hari F. <i></i> BCA</p>
-                <div class="account__row">
-                  <p class="account__number">0770512654</p>
-                  <button class="copy-btn" type="button" data-copy="0770512654" aria-label="Salin nomor rekening Rizky"></button>
-                </div>
+        <div class="gift__block">
+          <p class="gift__tag" data-reveal="up">Amplop digital</p>
+          <div class="gift__accounts" data-reveal="up">
+            <div class="account">
+              <p class="account__label">Azie Melasari - BCA</p>
+              <div class="account__row">
+                <p class="account__number">0771019900</p>
+                <button class="copy-btn" type="button" data-copy="0771019900" aria-label="Salin nomor rekening Azie"></button>
               </div>
             </div>
-          </div>
-
-          <span class="gift__divider" data-reveal="line"></span>
-
-          <div class="gift__block">
-            <p class="tag" data-reveal="up">Kirim hadiah</p>
-            <div class="address" data-reveal="up">
-              <p class="address__text" id="giftAddress">Perumahan Puri Pradana, No. A26, Blukukan Satu, Tohudan, Kec. Colomadu, Kabupaten Karanganyar, Jawa Tengah 57174. (Azie Melasari)</p>
-              <button class="copy-btn" type="button" data-copy-target="giftAddress" aria-label="Salin alamat"></button>
+            <div class="account">
+              <p class="account__label">Rizky Hari Fernanda - BCA</p>
+              <div class="account__row">
+                <p class="account__number">0770512654</p>
+                <button class="copy-btn" type="button" data-copy="0770512654" aria-label="Salin nomor rekening Rizky"></button>
+              </div>
             </div>
           </div>
         </div>
+
+        <div class="gift__block gift__block--gift">
+          <p class="gift__tag" data-reveal="up">Kirim hadiah</p>
+          <p class="gift__address" data-reveal="up">Perumahan Puri Pradana, No. A26, Blulukan Satu,<br>Tohudan, Kec. Colomadu, Kabupaten Karanganyar,<br>Jawa Tengah 57174</p>
+          <p class="gift__address" data-reveal="up">a.n Azie Melasari</p>
+        </div>
       </div>
-      <div class="d dw gift__leaf-1"><img data-leaf-sway src="assets/img/leaf-topmost.webp" alt=""></div>
-      <div class="d dw gift__leaf-2"><img data-leaf-sway src="assets/img/leaf-topmost.webp" alt=""></div>
-      <div class="d dw gift__leaves"><img data-sway src="assets/img/lily-right-leaves.webp" alt=""></div>
     </section>
 
     <!-- ============ FOOTER ============ -->
@@ -462,16 +464,17 @@
         <img class="footer__monogram" src="assets/img/monogram.svg" alt="AR">
         <p class="footer__date gt">17 · 01 · 2027</p>
       </div>
+      <!-- penutup paling bawah: tampil langsung, tanpa animasi -->
       <div class="footer__closing">
-        <p class="footer__thanks" data-reveal="up">Terima kasih telah menjadi bagian dari cerita kami,<br>sampai bertemu di hari bahagia besok!</p>
-        <img class="footer__divider" src="assets/img/footer-divider.svg" alt="" data-reveal="line">
+        <p class="footer__thanks">Terima kasih telah menjadi bagian dari cerita kami,<br>sampai bertemu di hari bahagia besok!</p>
+        <img class="footer__divider" src="assets/img/footer-divider.svg" alt="">
         <div class="footer__sign">
-          <p class="footer__kami" data-reveal="up">Kami yang berbahagia</p>
-          <div class="names names--footer" data-reveal="up">
+          <div class="names names--footer">
             <span class="names__word gt">Azie</span>
             <span class="names__amp"><span class="gt">&amp;</span></span>
             <span class="names__word gt">Rizky</span>
           </div>
+          <p class="footer__hashtag">#RizkyForAzie</p>
         </div>
       </div>
     </footer>

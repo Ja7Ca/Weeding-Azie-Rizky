@@ -26,5 +26,3 @@ Lalu buka:
 Kuota Figma MCP (paket Starter) habis sebelum layer berikut sempat diekspor. Ekspor manual dari Figma sebagai PNG @2x, lalu kirimkan:
 - [ ] Foto mempelai pria: layer **"REYY0590 3"** di section Mempelai. Saat ini memakai potongan screenshot beresolusi rendah (`assets/img/groom-placeholder.webp`).
 - [ ] **"Pink Bellflower Group 1"** (pojok kanan bawah section Mempelai)
-- [ ] **"White Poppy Flower Group 2"** dan **"Mask group" (Bell Flower Cluster)** di section Tanda Kasih
-- [ ] File font: Awesome Serif, Margelin, JaneAusten (lihat `css/fonts.css`)
