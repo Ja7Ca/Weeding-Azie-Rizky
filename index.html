@@ -51,6 +51,7 @@
        Swipe up / scroll / ketuk → cover naik dan hero terbuka penuh. -->
   <div class="cover" id="cover" hidden>
     <!-- gambar "Kertas Cover" dari Figma, dipotong 3 bagian (+ isian) supaya pas di semua tinggi layar -->
+    <i class="cover__safe" id="coverSafe" aria-hidden="true"></i>
     <div class="cover__paper" id="coverPaper" aria-hidden="true">
       <i class="cover__cap"></i>
       <i class="cover__mid"></i>
@@ -62,7 +63,9 @@
       <span>Swipe up</span><i></i><span>to open</span>
     </button>
     <!-- Browser hanya mengizinkan musik setelah ketukan/klik (bukan swipe/scroll), jadi pakai tombol -->
-    <button class="cover__btn" id="coverBtn" type="button">Buka Undangan</button>
+    <div class="cover__actions" id="coverActions">
+      <button class="cover__btn" id="coverBtn" type="button">Buka Undangan</button>
+    </div>
   </div>
 
   <!-- Tombol musik (komponen "Music") -->

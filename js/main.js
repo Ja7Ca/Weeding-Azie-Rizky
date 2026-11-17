@@ -204,6 +204,8 @@
   const paper = $("#coverPaper");
   const coverCta = $("#coverOpen");
   const coverBtn = $("#coverBtn");
+  const coverActions = $("#coverActions");
+  const coverSafe = $("#coverSafe");
   // Ukuran gambar "Kertas Cover" dalam satuan desain (lebar 390):
   //   potongan atas 0–740 (pusat oval y=420), potongan bawah 740–981 (sisi panel
   //   berakhir di y=862, ujung runcing di y=981), isian tengah diulang bila layar lebih tinggi.
@@ -226,17 +228,21 @@
     const [cap, mid, top, head, bottom] = paper.children;
 
     Object.assign(top.style, { top: px(topY), height: px(PAPER.topH * s) });
-    // HP pendek: kertas tergeser naik agar oval pas dengan teks → garis bingkai atas akan terpotong.
-    // Tepi atas (0–38) dipasang tetap di paling atas; selisihnya terserap di area polos di bawahnya.
-    Object.assign(head.style, { top: "0px", height: px(topY < 0 ? 38 * s : 0) });
+    // Garis bingkai atas harus terlihat di bawah status bar/notch iPhone (Safari menggambar halaman
+    // sampai ke belakang status bar). Bila kertas tergeser naik (HP pendek) atau bingkainya tertutup
+    // status bar, tepi atas kertas (0–38) dipasang tepat di bawah area aman; selisihnya terserap di
+    // area kertas polos antara bingkai dan oval.
+    const safeTop = coverSafe.getBoundingClientRect().height || 0;
+    const needHead = topY < safeTop;
+    Object.assign(head.style, { top: px(needHead ? safeTop : 0), height: px(needHead ? 38 * s : 0) });
     Object.assign(bottom.style, { top: px(bottomY), height: px(PAPER.bottomH * s) });
     // isian tengah (bila ada celah antara potongan atas & bawah)
     Object.assign(mid.style, { top: px(topEnd - 2), height: px(Math.max(0, bottomY - topEnd + 4)), backgroundSize: `100% ${60 * s}px` });
     // isian atas (bila kertas tergeser ke bawah)
-    Object.assign(cap.style, { top: "0px", height: px(Math.max(0, topY + 2)), backgroundSize: `100% ${18 * s}px` });
+    Object.assign(cap.style, { top: "0px", height: px(Math.max(0, (needHead ? safeTop : topY) + 2)), backgroundSize: `100% ${18 * s}px` });
     // posisi "Swipe up | To open" sesuai desain, tapi tetap di dalam layar pada HP pendek
     coverCta.style.top = px(Math.min(topY + PAPER.ctaY * s, vh - 46 * s));
-    coverBtn.style.top = coverCta.style.top;
+    coverActions.style.top = px(parseFloat(coverCta.style.top) - 18 * s); // pusat tombol (tinggi 36) di posisi ajakan
     coverHeight = bottomY + PAPER.tipInBottom * s;
     paper.style.height = px(coverHeight);
   }

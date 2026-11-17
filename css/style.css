@@ -964,7 +964,8 @@ section, footer { position: relative; }
 .cover__paper i { position: absolute; left: 0; width: 100%; display: block; background-repeat: no-repeat; background-size: 100% auto; }
 .cover__top    { background-image: url("../assets/img/cover-top.webp"); }
 /* tepi atas kertas (dengan garis bingkai) — selalu di paling atas layar pada HP pendek */
-.cover__head   { background-image: url("../assets/img/cover-top.webp"); background-position: top center; }
+.cover__head   { background-image: url("../assets/img/cover-top.webp"); background-position: top center; z-index: 2; }
+.cover__cap    { z-index: 1; } /* menutup garis samping kertas di area status bar */
 .cover__bottom { background-image: url("../assets/img/cover-bottom.webp"); }
 .cover__mid    { background-image: url("../assets/img/cover-mid.webp");  background-repeat: repeat-y !important; }
 .cover__cap    { background-image: url("../assets/img/cover-cap.webp");  background-repeat: repeat-y !important; }
@@ -989,8 +990,18 @@ section, footer { position: relative; }
   background: linear-gradient(180deg, rgba(93, 19, 17, 0), var(--maroon-text) 50%, rgba(93, 19, 17, 0));
   animation: coverLine 2s cubic-bezier(.65, 0, .35, 1) infinite;
 }
+/* baris selebar cover, tombol di tengah dengan flex (bukan transform, agar animasi goyang tombol
+   tidak pernah menggeser posisinya) */
+.cover__actions {
+  position: absolute; left: 0; right: 0; top: calc(709 * var(--s)); /* top diatur JS */
+  display: flex; justify-content: center;
+  pointer-events: none;
+}
+.cover__actions .cover__btn { pointer-events: auto; }
+/* pengukur tinggi area status bar / notch (env safe-area) */
+.cover__safe { position: absolute; top: 0; left: 0; width: 0; height: env(safe-area-inset-top, 0px); pointer-events: none; }
 .cover__btn {
-  position: absolute; left: 50%; top: calc(727 * var(--s)); translate: -50% -50%; /* top diatur JS */
+  position: relative;
   display: none; align-items: center; justify-content: center;
   height: calc(36 * var(--s)); padding: 0 calc(22 * var(--s));
   border: 1px solid var(--maroon-text);
