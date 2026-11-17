@@ -530,19 +530,12 @@ section, footer { position: relative; }
   --stick: calc(50svh - 150 * var(--s));
 }
 .story__stack::after { content: ""; flex: none; height: calc(36 * var(--s)); }
-/* pita emas: lapisan di atas semua kartu; posisinya diatur JS agar selalu menempel
-   pada kartu paling depan (ikut pergi saat tumpukan bergulir lewat) */
-.story__ribbons {
-  position: absolute; left: 0; top: 0; z-index: 5;
-  width: 100%; height: calc(279 * var(--s));
-  pointer-events: none;
-  will-change: transform;
-}
 .story__item {
   position: sticky;
   top: calc(var(--stick) + var(--i) * 12 * var(--s));
   height: calc(279 * var(--s));
   flex: none;
+  transform-origin: 50% 0; /* mengecil dari tepi atas, tepi atas kartu tetap terlihat di tumpukan */
 }
 .story__card {
   position: absolute; inset: 0;
@@ -592,7 +585,7 @@ section, footer { position: relative; }
   font-size: calc(12 * var(--s)); line-height: 1.5; letter-spacing: calc(.12 * var(--s));
   color: var(--cream);
 }
-.story__ribbon { position: absolute; transform-origin: 50% 0; }
+.story__ribbon { position: absolute; transform-origin: 50% 0; z-index: 1; }
 .story__ribbon--l { left: calc(-6.04 * var(--s)); top: calc(104.63 * var(--s)); width: calc(24.28 * var(--s)); height: calc(70.38 * var(--s)); }
 .story__ribbon--r { right: calc(-7.48 * var(--s)); top: calc(103.03 * var(--s)); width: calc(24.48 * var(--s)); height: calc(72.22 * var(--s)); }
 
@@ -958,11 +951,9 @@ section, footer { position: relative; }
 }
 .cover__btn:hover { background: var(--maroon-text); color: var(--paper); }
 .cover__btn:active { transform: scale(.96); }
-/* perangkat dengan mouse (desktop/laptop): tampilkan tombol, sembunyikan ajakan swipe */
-@media (hover: hover) and (pointer: fine) {
-  .cover__cta { display: none; }
-  .cover__btn { display: flex; }
-}
+/* tombol "Buka Undangan" di semua perangkat (ajakan swipe tidak dipakai: swipe tidak bisa memutar musik) */
+.cover__cta { display: none; }
+.cover__btn { display: flex; }
 @keyframes coverLine { 0% { transform: translateY(100%); } 100% { transform: translateY(-100%); } }
 
 /* =========================================================

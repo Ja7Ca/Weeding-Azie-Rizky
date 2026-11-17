@@ -59,7 +59,7 @@
     <button class="cover__cta" id="coverOpen" type="button" aria-label="Buka undangan">
       <span>Swipe up</span><i></i><span>to open</span>
     </button>
-    <!-- Desktop: scroll mouse tidak diizinkan browser untuk memutar musik, jadi pakai tombol -->
+    <!-- Browser hanya mengizinkan musik setelah ketukan/klik (bukan swipe/scroll), jadi pakai tombol -->
     <button class="cover__btn" id="coverBtn" type="button">Buka Undangan</button>
   </div>
 
@@ -228,11 +228,6 @@
       <!-- Empat chapter tersusun ke bawah (frame "love story - Full"); saat di-scroll tiap kartu
            menempel lalu kartu berikutnya menumpuk di atasnya -->
       <div class="story__stack">
-        <!-- pita emas: lapisan terpisah yang ikut menempel, selalu di atas semua kartu -->
-        <div class="story__ribbons" aria-hidden="true">
-          <img class="story__ribbon story__ribbon--l" data-sway src="assets/img/ribbon-left.webp" alt="">
-          <img class="story__ribbon story__ribbon--r" data-sway src="assets/img/ribbon-right.webp" alt="">
-        </div>
         <div class="story__item" style="--i:0">
           <article class="story__card" data-chapter="0">
             <div class="story__texture"></div>
@@ -245,6 +240,8 @@
             </div>
             <span class="story__dim"></span>
           </article>
+          <img class="story__ribbon story__ribbon--l" data-sway src="assets/img/ribbon-left.webp" alt="">
+          <img class="story__ribbon story__ribbon--r" data-sway src="assets/img/ribbon-right.webp" alt="">
         </div>
         <div class="story__item" style="--i:1">
           <article class="story__card" data-chapter="1">
@@ -258,6 +255,8 @@
             </div>
             <span class="story__dim"></span>
           </article>
+          <img class="story__ribbon story__ribbon--l" data-sway src="assets/img/ribbon-left.webp" alt="">
+          <img class="story__ribbon story__ribbon--r" data-sway src="assets/img/ribbon-right.webp" alt="">
         </div>
         <div class="story__item" style="--i:2">
           <article class="story__card" data-chapter="2">
@@ -271,6 +270,8 @@
             </div>
             <span class="story__dim"></span>
           </article>
+          <img class="story__ribbon story__ribbon--l" data-sway src="assets/img/ribbon-left.webp" alt="">
+          <img class="story__ribbon story__ribbon--r" data-sway src="assets/img/ribbon-right.webp" alt="">
         </div>
         <div class="story__item" style="--i:3">
           <article class="story__card" data-chapter="3">
@@ -284,6 +285,8 @@
             </div>
             <span class="story__dim"></span>
           </article>
+          <img class="story__ribbon story__ribbon--l" data-sway src="assets/img/ribbon-left.webp" alt="">
+          <img class="story__ribbon story__ribbon--r" data-sway src="assets/img/ribbon-right.webp" alt="">
         </div>
       </div>
     </section>

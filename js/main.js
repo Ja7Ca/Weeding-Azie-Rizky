@@ -202,8 +202,6 @@
   const paper = $("#coverPaper");
   const coverCta = $("#coverOpen");
   const coverBtn = $("#coverBtn");
-  // perangkat ber-mouse: scroll tidak dihitung browser sebagai izin memutar musik → pakai tombol
-  const mouseDevice = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   // Ukuran gambar "Kertas Cover" dalam satuan desain (lebar 390):
   //   potongan atas 0–740 (pusat oval y=420), potongan bawah 740–981 (sisi panel
   //   berakhir di y=862, ujung runcing di y=981), isian tengah diulang bila layar lebih tinggi.
@@ -253,15 +251,16 @@
     if (heroFlora) heroFlora.play(0);                 // bunga tumbuh saat sampul terangkat
     gsap.delayedCall(0.9, unlockScroll);
   }
+  /* Browser (desktop & HP) hanya mengizinkan musik setelah ketukan/klik, bukan scroll/swipe.
+     Jadi cover dibuka lewat tombol "Buka Undangan" (atau ketuk di mana saja pada cover);
+     scroll/swipe hanya menggoyangkan tombol sebagai petunjuk. */
   let nudging = false;
-  function onWheel(e) {
-    if (e.deltaY <= 4) return;
-    if (!mouseDevice) return openCover();
-    // desktop: jangan buka lewat scroll (musik akan ditolak browser) — goyangkan tombolnya sebagai petunjuk
-    if (nudging || !hasGsap) return;
+  function nudgeButton() {
+    if (nudging || !hasGsap || coverOpened) return;
     nudging = true;
     gsap.fromTo(coverBtn, { scale: 1 }, { scale: 1.08, duration: 0.18, yoyo: true, repeat: 3, ease: "power1.inOut", clearProps: "transform,translate,scale,rotate", onComplete: () => { nudging = false; } });
   }
+  function onWheel(e) { if (e.deltaY > 4) nudgeButton(); }
   function onKey(e) { if (["ArrowDown", "PageDown", " ", "Enter"].includes(e.key)) { e.preventDefault(); openCover(); } }
 
   function setupCover() {
@@ -285,13 +284,12 @@
     cover.addEventListener("touchmove", (e) => {
       if (startY == null || coverOpened) return;
       const dy = startY - e.touches[0].clientY;
-      if (hasGsap && dy > 0) gsap.set(cover, { y: -Math.min(dy, 120) * 0.5 });
-      if (dy > 45) openCover();
+      // kertas ikut tertarik sedikit, lalu tombol bergoyang memberi petunjuk untuk diketuk
+      if (hasGsap && dy > 0) gsap.set(cover, { y: -Math.min(dy, 120) * 0.35 });
+      if (dy > 45) nudgeButton();
     }, { passive: true });
     cover.addEventListener("touchend", () => {
-      if (!coverOpened && hasGsap) gsap.to(cover, { y: 0, duration: 0.4, ease: "power2.out" });
-      // jari dilepas = aktivasi yang sah → saat inilah lagu diputar setelah swipe up
-      if (coverOpened && audio.paused) startMusic();
+      if (!coverOpened && hasGsap) gsap.to(cover, { y: 0, duration: 0.45, ease: "power2.out" });
       startY = null;
     });
   }
@@ -401,9 +399,10 @@
     // kartu di bawahnya sedikit mengecil dan meredup. Jarak scroll = tinggi kartu + jarak (±300px).
     (function storyStack() {
       const items = $$(".story__item");
-      const ribbons = $(".story__ribbons");
-      const stickTop = (el) => parseFloat(getComputedStyle(el).top) || 0;
-      gsap.from(items[0], { opacity: 0, y: 40, duration: 1.2, ease: "power3.out", clearProps: "transform", scrollTrigger: st(items[0], "top 92%") });
+      // kartu pertama + pitanya muncul; dianimasikan pada isinya (bukan pembungkus) agar tidak
+      // bentrok dengan skala tumpukan yang memakai pembungkus .story__item
+      const firstParts = [$(".story__card", items[0]), ...$$(".story__ribbon", items[0])];
+      gsap.from(firstParts, { opacity: 0, y: 40, duration: 1.2, ease: "power3.out", scrollTrigger: st(items[0], "top 92%") });
       items.slice(0, -1).forEach((item, i) => {
         const next = items[i + 1];
         const card = $(".story__card", item);
@@ -416,31 +415,13 @@
             invalidateOnRefresh: true,
           },
         })
-          .to(card, { scale: 0.94, ease: "none" }, 0)
-          .to($(".story__dim", card), { opacity: 0.45, ease: "none" }, 0);
+          // yang mengecil pembungkusnya (kartu + pita), supaya pita ikut ukuran kartu
+          .to(item, { scale: 0.94, ease: "none" }, 0)
+          .to($(".story__dim", card), { opacity: 0.45, ease: "none" }, 0)
+          // pita kartu yang tertutup memudar; pita kartu paling depan tetap terlihat di atas
+          .to($$(".story__ribbon", item), { opacity: 0, ease: "none" }, 0.4);
       });
 
-      // Pita menempel pada kartu paling depan yang sudah menempel, lalu bergeser pelan
-      // (maks. 12px) ke posisi kartu berikutnya saat kartu itu datang.
-      const stack = $(".story__stack");
-      function placeRibbons() {
-        const stackTop = stack.getBoundingClientRect().top;
-        const vh = window.innerHeight;
-        let front = items[0], extra = 0;
-        for (let k = 1; k < items.length; k++) {
-          const top = stickTop(items[k]);
-          const d = items[k].getBoundingClientRect().top - top;          // jarak ke posisi menempel
-          const p = Math.min(1, Math.max(0, 1 - d / Math.max(1, vh - top)));
-          if (p >= 0.999) { front = items[k]; extra = 0; }
-          else { extra = (top - stickTop(front)) * p; break; }
-        }
-        gsap.set(ribbons, { y: front.getBoundingClientRect().top - stackTop + extra });
-      }
-      ScrollTrigger.create({
-        trigger: stack, start: "top bottom", end: "bottom top",
-        onUpdate: placeRibbons, onRefresh: placeRibbons,
-      });
-      placeRibbons();
     })();
 
     // Galeri: foto masuk satu per satu
@@ -452,7 +433,10 @@
 
     // Ornamen bunga & daun di tiap section: muncul + bergoyang
     $$("section [data-sway], section [data-leaf-sway]").forEach((el, i) => {
-      gsap.from(el, { opacity: 0, scale: 0.8, duration: 1.4, ease: "power3.out", scrollTrigger: st(el, "top 95%") });
+      // pita Love Story: muncul bersama kartunya & opacity-nya diatur tumpukan kartu
+      if (!el.closest(".story__item")) {
+        gsap.from(el, { opacity: 0, scale: 0.8, duration: 1.4, ease: "power3.out", scrollTrigger: st(el, "top 95%") });
+      }
       // hembusan angin tipis: cukup terasa (±2–2.6° bunga, ±1.3° daun) tapi tetap pelan & lembut
       const leaf = el.hasAttribute("data-leaf-sway");
       sway(el, leaf ? 1.3 : 2 + (i % 3) * 0.3, 5.5 + (i % 4) * 0.7, (i % 5) * 0.45, leaf ? 0.8 : 1.2);
