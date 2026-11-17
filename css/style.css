@@ -42,7 +42,8 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
-body.is-locked { overflow: hidden; height: 100svh; }
+/* saat cover tampil (tanpa scroll): ikuti tinggi area yang benar-benar terlihat (dvh) */
+body.is-locked { overflow: hidden; height: 100vh; height: 100dvh; }
 
 img { display: block; max-width: none; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
@@ -144,7 +145,7 @@ section, footer { position: relative; }
   font-family: var(--f-amp);
   font-size: calc(21 * var(--s));
   line-height: 1;
-  transform: translateY(calc(1 * var(--s))) scaleX(.86); /* lebih ramping, seperti versi "Extra Tall" */
+  transform: translateY(calc(1 * var(--s)));
 }
 .names--footer .names__word { font-size: calc(45.5 * var(--s)); letter-spacing: calc(2.28 * var(--s)); }
 .names--footer .names__amp { width: calc(29 * var(--s)); height: calc(29 * var(--s)); border-width: calc(1.3 * var(--s)); }
@@ -208,6 +209,8 @@ section, footer { position: relative; }
    HERO
    ========================================================= */
 .hero {
+  /* svh, bukan dvh: tinggi stabil walau address bar muncul/hilang saat scroll */
+  height: 100vh;
   height: 100svh;
   min-height: calc(740 * var(--s));
   max-height: calc(900 * var(--s));
@@ -261,12 +264,18 @@ section, footer { position: relative; }
 }
 .hero__group { display: flex; flex-direction: column; align-items: center; gap: calc(6 * var(--s)); width: 100%; }
 .hero__guest-name {
+  /* Figma: JaneAusten · 27px · weight 400 · line-height 100% · letter-spacing 0 · center */
   font-family: var(--f-script);
   font-size: calc(27 * var(--s));
-  line-height: 1.35;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
   text-align: center;
   width: calc(258.75 * var(--s));
-  padding: 0 calc(6 * var(--s));
+  /* ruang ekstra atas/bawah agar gradasi teks ikut mengecat ujung huruf script yang menjulur,
+     dibatalkan dengan margin negatif → tinggi tata letak tetap line-height 100% seperti Figma */
+  padding: .3em calc(6 * var(--s));
+  margin: -.3em 0;
 }
 .hero__dots { width: calc(172.5 * var(--s)); height: 1px; transform-origin: 50% 50%; }
 
@@ -346,7 +355,7 @@ section, footer { position: relative; }
 }
 .green-card__pattern {
   position: absolute; inset: 0;
-  opacity: .22;
+  opacity: .1;
   /* pola bintang Figma: tile 106.4 x 58, bintang di (0,0) & (48,29) */
   background: url("../assets/img/sparkle-tile.svg") calc(14 * var(--s)) calc(14 * var(--s)) / calc(106.4 * var(--s)) calc(58 * var(--s)) repeat;
 }
@@ -371,8 +380,13 @@ section, footer { position: relative; }
   font-family: var(--f-script);
   font-size: calc(38 * var(--s));
   line-height: 1.2;
-  color: #154032;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, .15), 0 -1px 0 rgba(221, 190, 155, .05);
+  /* efek timbul seperti di Figma: isi huruf sedikit lebih terang dari kartu (#154032 + putih 3%,
+     dipertegas), bayangan gelap tipis di bawah & tepi, kilau tipis di atas */
+  color: #21503f;
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, .35),
+    0 0 1px rgba(0, 0, 0, .3),
+    0 -1px 0 rgba(255, 255, 255, .05);
   white-space: nowrap;
 }
 .mempelai__ghost--1 { left: calc(39 * var(--s)); top: calc(113 * var(--s)); }
@@ -416,10 +430,23 @@ section, footer { position: relative; }
 .mempelai__amp {
   position: absolute; left: calc(40 * var(--s)); top: calc(431 * var(--s));
   width: calc(54 * var(--s)); height: calc(54 * var(--s));
-  border: calc(2.25 * var(--s)) solid var(--cream); border-radius: 50%;
-  display: grid; place-items: center; overflow: hidden;
+  border-radius: 50%;
+  display: grid; place-items: center;
 }
-.mempelai__amp .gt { font-family: var(--f-amp); font-size: calc(30 * var(--s)); line-height: 1; transform: translateY(calc(1 * var(--s))) scaleX(.86); }
+/* garis lingkaran bergradasi kiri → kanan (#DDBE9B → #776653), seperti di desain.
+   Dibuat dengan ::before + mask karena border biasa tidak bisa bergradasi pada sudut bulat. */
+.mempelai__amp::before {
+  content: ""; position: absolute; inset: 0;
+  border-radius: 50%;
+  padding: calc(2.25 * var(--s));
+  background: var(--grad);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.mempelai__amp .gt { font-family: var(--f-amp); font-size: calc(34.16 * var(--s)); line-height: 1; transform: translateY(calc(1 * var(--s))); }
 .mempelai__amp-line {
   position: absolute; left: calc(117 * var(--s)); top: calc(458 * var(--s));
   width: calc(209.5 * var(--s)); height: 1px;
@@ -499,7 +526,8 @@ section, footer { position: relative; }
   -webkit-mask: url("../assets/img/mask-gedung.svg") 0 0 / 100% 100% no-repeat; mask: url("../assets/img/mask-gedung.svg") 0 0 / 100% 100% no-repeat;
 }
 .sketch--gedung img { left: calc(-5.417 * var(--s)); top: calc(-24.737 * var(--s)); width: calc(301.01 * var(--s)); height: calc(200.67 * var(--s)); object-fit: cover; }
-.acara__divider { width: calc(209.5 * var(--s)); height: 1px; }
+/* garis – bintang – garis, garis memudar ke ujung (seperti pemisah di footer, warna untuk kertas krem) */
+.acara__divider { width: calc(224.4 * var(--s)); height: calc(11.4 * var(--s)); }
 
 .acara__leaf-1 { right: 0; bottom: 0; width: calc(159 * var(--s)); height: calc(33 * var(--s)); rotate: 180deg; }
 .acara__leaf-2 { right: calc(-16.64 * var(--s)); bottom: calc(-.25 * var(--s)); width: calc(105.2 * var(--s)); height: calc(104.68 * var(--s)); display: grid; place-items: center; }
@@ -512,10 +540,19 @@ section, footer { position: relative; }
 /* =========================================================
    LOVE STORY
    ========================================================= */
-.story { padding: calc(56 * var(--s)) 0 calc(46 * var(--s)); }
+.story {
+  padding: calc(56 * var(--s)) 0 calc(46 * var(--s));
+  /* posisi kartu saat menempel: kira-kira di tengah layar (dipakai judul & kartu) */
+  --stick: calc(50vh - 150 * var(--s)); /* fallback browser lama */
+}
+/* Judul ikut menempel di atas tumpukan kartu, dan "lepas" tepat bersamaan dengan kartu terdepan:
+   margin-bawah besar (339 = 24 jarak + 279 kartu + 36 offset tumpukan) membuat batas lepasnya sama
+   dengan kartu terakhir; stack ditarik naik lagi agar jarak tampilan tetap 24. */
 .story__head {
-  display: flex; flex-direction: column; align-items: center; text-align: center;
-  margin-bottom: calc(24 * var(--s));
+  position: sticky; top: calc(var(--stick) - 124 * var(--s)); z-index: 3;
+  height: calc(100 * var(--s));
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center;
+  margin-bottom: calc(339 * var(--s));
 }
 .story__head .section-title { line-height: 1.2; }
 .story__stack {
@@ -525,9 +562,11 @@ section, footer { position: relative; }
   /* ruang ekstra (::after) agar tepi kartu yang tertumpuk tidak menyatu saat tumpukan bergulir
      pergi. Ruang ini sengaja ikut dihitung di layout: kartu terakhir berhenti ±63px lebih bawah
      dari posisi normalnya, jadi jarak ke ornamen Galeri tetap ±46px seperti di desain. */
-  /* posisi kartu saat menempel: kira-kira di tengah layar, tiap kartu turun 12px
-     supaya tepi kartu di bawahnya tetap terlihat seperti tumpukan */
-  --stick: calc(50svh - 150 * var(--s));
+  margin-top: calc(-315 * var(--s)); /* membatalkan margin-bawah judul (339 - 24) */
+}
+@supports (height: 1svh) {
+  /* svh, bukan dvh: posisi menempel tidak ikut bergeser saat toolbar HP muncul/hilang */
+  .story { --stick: calc(50svh - 150 * var(--s)); }
 }
 .story__stack::after { content: ""; flex: none; height: calc(36 * var(--s)); }
 .story__item {
@@ -542,7 +581,8 @@ section, footer { position: relative; }
   background: var(--green);
   border: 1px solid var(--cream);
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, .25);
+  /* bayangan ke atas (jatuh di tepi kartu di belakangnya) + ke bawah */
+  box-shadow: 0 -8px 18px rgba(0, 0, 0, .35), 0 18px 36px rgba(0, 0, 0, .3);
   transform-origin: 50% 0;
   will-change: transform;
 }
@@ -625,15 +665,18 @@ section, footer { position: relative; }
   box-shadow: 0 10px 24px rgba(0, 0, 0, .25);
 }
 .photo img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; user-select: none; -webkit-user-drag: none; }
+.photo { cursor: zoom-in; }
+.photo:focus-visible { outline: 2px solid var(--cream); outline-offset: 3px; }
 .photo--tall   { width: calc(150 * var(--s)); height: calc(230 * var(--s)); }
 .photo--wide   { width: calc(300 * var(--s)); height: calc(232 * var(--s)); }
 .photo--square { width: calc(225 * var(--s)); height: calc(225 * var(--s)); }
 .photo--std    { width: calc(168.75 * var(--s)); height: calc(225 * var(--s)); }
 
+/* navigasi sederhana: dua tombol bulat di tengah */
 .gallery__controls {
-  position: absolute; left: calc(20 * var(--s)); top: calc(417 * var(--s));
-  width: calc(350 * var(--s)); height: calc(32 * var(--s));
-  display: flex; align-items: center; gap: calc(10 * var(--s));
+  position: absolute; left: 0; right: 0; top: calc(417 * var(--s));
+  height: calc(32 * var(--s));
+  display: flex; align-items: center; justify-content: center; gap: calc(16 * var(--s));
 }
 .circle-btn {
   flex: none;
@@ -647,8 +690,6 @@ section, footer { position: relative; }
 #galleryPrev img { scale: -1 1; } /* panah kiri = panah kanan dicerminkan (sesuai Figma) */
 .circle-btn:hover { background: rgba(221, 190, 155, .12); }
 .circle-btn:active { transform: scale(.92); }
-.gallery__progress { position: relative; flex: 1; height: 1px; background: rgba(221, 190, 155, .2); overflow: hidden; }
-.gallery__progress span { position: absolute; left: 0; top: 0; height: 100%; width: 30%; background: var(--cream); will-change: transform; }
 
 /* =========================================================
    LIVE STREAMING
@@ -881,7 +922,7 @@ section, footer { position: relative; }
    FOOTER
    ========================================================= */
 .footer { height: calc(844 * var(--s)); }
-.footer__photo { position: relative; height: calc(559 * var(--s)); background: #dedede; overflow: hidden; }
+.footer__photo { position: relative; height: calc(559 * var(--s)); background: #0b0b0b; overflow: hidden; }
 .footer__img { position: absolute; left: 0; top: calc(-6.75 * var(--s)); width: calc(399.03 * var(--s)); height: calc(598.47 * var(--s)); object-fit: cover; transform-origin: 50% 40%; }
 .footer__monogram { position: absolute; left: 50%; top: calc(447.1 * var(--s)); width: calc(107.38 * var(--s)); height: calc(124.2 * var(--s)); translate: -50% -50%; }
 .footer__date {
@@ -897,14 +938,23 @@ section, footer { position: relative; }
 .footer__thanks { width: calc(284 * var(--s)); font-size: calc(12 * var(--s)); line-height: 1.45; letter-spacing: calc(.24 * var(--s)); }
 .footer__divider { width: calc(224.4 * var(--s)); height: calc(11.4 * var(--s)); }
 .footer__sign { width: 100%; display: flex; flex-direction: column; align-items: center; }
-.footer__kami { font-size: calc(12 * var(--s)); line-height: 1.45; letter-spacing: calc(.24 * var(--s)); }
+.footer__sign { margin-top: calc(14 * var(--s)); gap: calc(6 * var(--s)); }
+/* Figma: Margelin Regular · 12px · line-height 145% · letter-spacing 20% · cream */
+.footer__hashtag {
+  font-family: var(--f-sans); font-weight: 400;
+  font-size: calc(12 * var(--s));
+  line-height: 1.45;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--cream);
+}
 
 /* =========================================================
    COVER (frame "Hero + Cover")
    ========================================================= */
 .cover {
   position: fixed; top: 0; left: 50%; z-index: 90;
-  width: min(100vw, 430px); height: 100svh;
+  width: min(100vw, 430px); height: 100vh; height: 100dvh; /* overlay tetap → dvh */
   translate: -50% 0;
   will-change: transform;
   touch-action: none;           /* gestur swipe ditangani JS */
@@ -957,6 +1007,57 @@ section, footer { position: relative; }
 @keyframes coverLine { 0% { transform: translateY(100%); } 100% { transform: translateY(-100%); } }
 
 /* =========================================================
+   LIGHTBOX galeri (frame "OUR GALLERY - Full")
+   ========================================================= */
+.lightbox {
+  position: fixed; inset: 0; z-index: 120;
+  display: grid; place-items: center;
+  background: rgba(16, 9, 11, .9);
+  -webkit-tap-highlight-color: transparent;
+}
+.lightbox[hidden] { display: none; }
+body.is-lightbox { overflow: hidden; }
+.lightbox__stage {
+  position: relative; margin: 0;
+  width: min(100vw, 430px);
+  display: grid; place-items: center;
+}
+.lightbox__img {
+  display: block;
+  width: 100%; height: auto;
+  max-height: 82vh; max-height: 82dvh;
+  object-fit: contain;
+  user-select: none; -webkit-user-drag: none;
+}
+.lightbox__close {
+  position: absolute;
+  top: calc(16px + env(safe-area-inset-top));
+  right: max(16px, calc(50vw - 215px + 16px));
+  width: 32px; height: 32px;
+  z-index: 1;
+}
+.lightbox__close::before, .lightbox__close::after {
+  content: ""; position: absolute; left: 50%; top: 50%;
+  width: 18px; height: 1.5px; background: #fff; border-radius: 1px;
+}
+.lightbox__close::before { transform: translate(-50%, -50%) rotate(45deg); }
+.lightbox__close::after { transform: translate(-50%, -50%) rotate(-45deg); }
+.lightbox__nav {
+  position: absolute; top: 50%; translate: 0 -50%;
+  width: 30px; height: 30px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: rgba(0, 0, 0, .35);
+  border: 1px solid rgba(255, 255, 255, .7);
+  transition: background-color .25s, transform .2s;
+}
+.lightbox__nav img { width: 11px; height: 11px; filter: brightness(0) invert(1); }
+.lightbox__nav--prev { left: 14px; }
+.lightbox__nav--prev img { scale: -1 1; }
+.lightbox__nav--next { right: 14px; }
+.lightbox__nav:hover { background: rgba(0, 0, 0, .55); }
+.lightbox__nav:active { transform: scale(.92); }
+
+/* =========================================================
    MUSIC (komponen "Music")
    ========================================================= */
 .music {
@@ -988,9 +1089,10 @@ section, footer { position: relative; }
    DESKTOP (frame "Desktop"): latar hijau berpola bintang di kiri-kanan undangan
    ========================================================= */
 @media (min-width: 431px) {
+  /* latar diam (fixed); yang bergulir hanya konten undangan di tengah. Pola bintang: opacity .1 (di file SVG) */
   body {
     background:
-      url("../assets/img/sparkle-tile-faint.svg") 0 0 / 106.4px 58px repeat,
+      url("../assets/img/sparkle-tile-faint.svg") 0 0 / 106.4px 58px repeat fixed,
       var(--green) url("../assets/img/green-texture.webp") center / cover fixed;
   }
 }

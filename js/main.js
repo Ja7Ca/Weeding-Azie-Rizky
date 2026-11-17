@@ -76,7 +76,9 @@
       .fromTo(qh("rizky"), { opacity: 0, x: 18, filter: "blur(6px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 1.1 }, 0.9)
       .fromTo(qh("date"), { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.9 }, 1.4)
       .fromTo(qh("kepada"), { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.9 }, 1.9)
-      .fromTo(qh("guest"), { opacity: 0, clipPath: "inset(0 100% 0 0)" }, { opacity: 1, clipPath: "inset(0 0% 0 0)", duration: 1.4, ease: "power2.inOut" }, 2.1)
+      // "tertulis" dari kiri ke kanan; batas atas/bawah dilonggarkan (-40%) karena dengan line-height 100%
+      // huruf script menjulur keluar kotaknya — lalu clip dilepas supaya tidak ada yang terpotong
+      .fromTo(qh("guest"), { opacity: 0, clipPath: "inset(-40% 100% -40% 0)" }, { opacity: 1, clipPath: "inset(-40% 0% -40% 0)", duration: 1.4, ease: "power2.inOut", clearProps: "clipPath" }, 2.1)
       .fromTo(qh("dots"), { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 1, ease: "power2.inOut" }, 2.7);
   }
 
@@ -403,25 +405,34 @@
       // bentrok dengan skala tumpukan yang memakai pembungkus .story__item
       const firstParts = [$(".story__card", items[0]), ...$$(".story__ribbon", items[0])];
       gsap.from(firstParts, { opacity: 0, y: 40, duration: 1.2, ease: "power3.out", scrollTrigger: st(items[0], "top 92%") });
-      items.slice(0, -1).forEach((item, i) => {
-        const next = items[i + 1];
-        const card = $(".story__card", item);
-        gsap.timeline({
-          scrollTrigger: {
-            trigger: next,
-            start: "top bottom",
-            end: () => `top ${parseFloat(getComputedStyle(next).top) || 0}px`,
-            scrub: true,
-            invalidateOnRefresh: true,
-          },
-        })
-          // yang mengecil pembungkusnya (kartu + pita), supaya pita ikut ukuran kartu
-          .to(item, { scale: 0.94, ease: "none" }, 0)
-          .to($(".story__dim", card), { opacity: 0.45, ease: "none" }, 0)
-          // pita kartu yang tertutup memudar; pita kartu paling depan tetap terlihat di atas
-          .to($$(".story__ribbon", item), { opacity: 0, ease: "none" }, 0.4);
+      // Kedalaman tumpukan: tiap kartu yang datang menambah "kedalaman" kartu di belakangnya.
+      // Kartu depan skala 1, di belakangnya ±0.92, lalu ±0.84, ±0.76 (berubah halus mengikuti scroll).
+      const STEP = 0.08;
+      const cards = items.map((it) => $(".story__card", it));
+      const dims = cards.map((cd) => $(".story__dim", cd));
+      const stickTop = (el) => parseFloat(getComputedStyle(el).top) || 0;
+      function updateDepth() {
+        const vh = window.innerHeight;
+        // progres datangnya tiap kartu: 0 = baru masuk dari bawah layar, 1 = sudah menempel
+        const prog = items.map((it, k) => {
+          if (k === 0) return 1;
+          const st0 = stickTop(it);
+          const top = it.getBoundingClientRect().top;
+          return Math.min(1, Math.max(0, (vh - top) / Math.max(1, vh - st0)));
+        });
+        items.forEach((it, j) => {
+          let depth = 0;
+          for (let k = j + 1; k < items.length; k++) depth += prog[k];
+          gsap.set(it, { scale: 1 - STEP * depth });
+          dims[j].style.opacity = Math.min(depth * 0.3, 0.6);
+          // pita tetap tampil di semua kartu dan ikut mengecil bersama kartunya (skala pembungkus)
+        });
+      }
+      ScrollTrigger.create({
+        trigger: ".story__stack", start: "top bottom", end: "bottom top",
+        onUpdate: updateDepth, onRefresh: updateDepth,
       });
-
+      updateDepth();
     })();
 
     // Galeri: foto masuk satu per satu
@@ -456,54 +467,51 @@
     ft.from(".footer__img", { scale: 1.15, filter: "blur(10px) grayscale(1)", opacity: 0.3, duration: 2.2, ease: "power2.out" })
       .from(".footer__monogram", { opacity: 0, y: 20, scale: 0.85, duration: 1.4, ease: "power3.out" }, 0.9)
       .from(".footer__date", { opacity: 0, letterSpacing: "0.6em", duration: 1.2, ease: "power3.out" }, 1.3);
-    if (!reduceMotion) gsap.to(".footer__img", {
-      yPercent: 6, ease: "none",
-      scrollTrigger: { trigger: ".footer__photo", start: "top bottom", end: "bottom top", scrub: true },
-    });
+    // parallax foto penutup: geser hanya sebatas sisa foto di luar bingkai (atas ±6.75, bawah ±32.7
+    // satuan desain) supaya tidak pernah muncul celah kosong di atas/bawah foto
+    if (!reduceMotion) {
+      const S = () => (Math.min(window.innerWidth, 430) / 390);
+      gsap.fromTo(".footer__img", { y: () => -28 * S() }, {
+        y: () => 5 * S(), ease: "none",
+        scrollTrigger: { trigger: ".footer__photo", start: "top bottom", end: "bottom top", scrub: true, invalidateOnRefresh: true },
+      });
+    }
   }
 
   if (hasGsap && window.ScrollTrigger) setupScrollAnimations();
 
   /* =========================================================
-     GALERI — geser, panah, progress bar
+     GALERI — geser, panah (berputar), & tampilan detail foto (lightbox)
      ========================================================= */
   (function gallery() {
     const vp = $("#galleryViewport");
-    const thumb = $("#galleryThumb");
     const track = $(".gallery__track", vp);
+    const photos = $$(".photo", track);
+    const pad = () => parseFloat(getComputedStyle(track).paddingLeft) || 0;
 
-    function updateThumb() {
-      const max = vp.scrollWidth - vp.clientWidth;
-      const ratio = vp.clientWidth / vp.scrollWidth;
-      const p = max > 0 ? vp.scrollLeft / max : 0;
-      thumb.style.width = `${Math.max(ratio * 100, 12)}%`;
-      const barW = thumb.parentElement.clientWidth;
-      thumb.style.transform = `translateX(${p * (barW - thumb.clientWidth)}px)`;
-    }
-
+    // panah: geser ke foto berikutnya/sebelumnya; di ujung kembali ke awal/akhir (looping)
     function step(dir) {
-      const items = $$(".photo", track);
       const left = vp.scrollLeft;
-      const pad = parseFloat(getComputedStyle(track).paddingLeft) || 0;
-      let target;
-      if (dir > 0) target = items.find((it) => it.offsetLeft - pad > left + 4);
-      else target = [...items].reverse().find((it) => it.offsetLeft - pad < left - 4);
-      const x = target ? target.offsetLeft - pad : dir > 0 ? vp.scrollWidth : 0;
+      const max = vp.scrollWidth - vp.clientWidth;
+      let x;
+      if (dir > 0) {
+        if (left >= max - 4) x = 0;                                     // di akhir → ke awal
+        else { const t = photos.find((it) => it.offsetLeft - pad() > left + 4); x = t ? t.offsetLeft - pad() : max; }
+      } else {
+        if (left <= 4) x = max;                                         // di awal → ke akhir
+        else { const t = [...photos].reverse().find((it) => it.offsetLeft - pad() < left - 4); x = t ? t.offsetLeft - pad() : 0; }
+      }
       vp.scrollTo({ left: x, behavior: "smooth" });
     }
-
     $("#galleryPrev").addEventListener("click", () => step(-1));
     $("#galleryNext").addEventListener("click", () => step(1));
-    vp.addEventListener("scroll", updateThumb, { passive: true });
-    window.addEventListener("resize", updateThumb);
-    $$("img", track).forEach((img) => img.addEventListener("load", updateThumb));
-    updateThumb();
 
     // drag dengan mouse (desktop)
     let down = false, startX = 0, startLeft = 0, moved = false;
     vp.addEventListener("pointerdown", (e) => {
+      moved = false;
       if (e.pointerType !== "mouse") return;
-      down = true; moved = false; startX = e.clientX; startLeft = vp.scrollLeft;
+      down = true; startX = e.clientX; startLeft = vp.scrollLeft;
       vp.classList.add("is-dragging");
     });
     window.addEventListener("pointermove", (e) => {
@@ -517,6 +525,72 @@
       down = false; vp.classList.remove("is-dragging");
     });
     vp.addEventListener("click", (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); } }, true);
+
+    /* ---------- lightbox (frame "OUR GALLERY - Full") ---------- */
+    const box = $("#lightbox");
+    const img = $(".lightbox__img", box);
+    const srcs = photos.map((ph) => $("img", ph).getAttribute("src"));
+    let index = 0, lastFocus = null;
+
+    function show(i, dir = 0) {
+      index = (i + srcs.length) % srcs.length;                          // berputar: setelah terakhir → pertama
+      if (hasGsap && dir) {
+        gsap.timeline()
+          .to(img, { opacity: 0, x: -24 * dir, duration: 0.18, ease: "power1.in" })
+          .add(() => { img.src = srcs[index]; })
+          .fromTo(img, { opacity: 0, x: 24 * dir }, { opacity: 1, x: 0, duration: 0.32, ease: "power2.out" });
+      } else img.src = srcs[index];
+      img.alt = `Foto ${index + 1} dari ${srcs.length}`;
+    }
+    function open(i) {
+      lastFocus = document.activeElement;
+      show(i);
+      box.hidden = false;
+      document.body.classList.add("is-lightbox");
+      if (lenis) lenis.stop();
+      if (hasGsap) {
+        gsap.fromTo(box, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" });
+        gsap.fromTo(img, { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, duration: 0.45, ease: "power3.out" });
+      }
+      $(".lightbox__close", box).focus({ preventScroll: true });
+    }
+    function close() {
+      const done = () => {
+        box.hidden = true;
+        document.body.classList.remove("is-lightbox");
+        if (lenis) lenis.start();
+        if (lastFocus) lastFocus.focus({ preventScroll: true });
+      };
+      if (hasGsap) gsap.to(box, { opacity: 0, duration: 0.25, ease: "power1.in", onComplete: done });
+      else done();
+    }
+
+    photos.forEach((ph, i) => {
+      ph.setAttribute("role", "button");
+      ph.setAttribute("tabindex", "0");
+      ph.setAttribute("aria-label", `Lihat foto ${i + 1}`);
+      ph.addEventListener("click", () => open(i));
+      ph.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(i); } });
+    });
+    $(".lightbox__nav--prev", box).addEventListener("click", (e) => { e.stopPropagation(); show(index - 1, -1); });
+    $(".lightbox__nav--next", box).addEventListener("click", (e) => { e.stopPropagation(); show(index + 1, 1); });
+    $(".lightbox__close", box).addEventListener("click", close);
+    box.addEventListener("click", (e) => { if (e.target === box) close(); });   // ketuk area gelap = tutup
+    document.addEventListener("keydown", (e) => {
+      if (box.hidden) return;
+      if (e.key === "Escape") close();
+      else if (e.key === "ArrowRight") show(index + 1, 1);
+      else if (e.key === "ArrowLeft") show(index - 1, -1);
+    });
+    // geser foto ke kiri/kanan di HP
+    let tx = null, ty = null;
+    box.addEventListener("touchstart", (e) => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+    box.addEventListener("touchend", (e) => {
+      if (tx == null) return;
+      const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) show(index + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1);
+      tx = ty = null;
+    });
   })();
 
   /* =========================================================

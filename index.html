@@ -13,9 +13,10 @@
   <meta property="og:description" content="Minggu, 17 Januari 2027 · Kami mengundang Anda untuk hadir di hari bahagia kami.">
   <meta property="og:image" content="assets/img/footer-photo.webp">
 
-  <!-- Font pengganti sementara (disimpan lokal). Font asli diaktifkan di css/fonts.css -->
-  <link rel="preload" href="assets/fonts/fallback/PinyonScript-normal-3.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/fonts/fallback/InstrumentSerif-normal-0.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- Font asli desain (css/fonts.css) dimuat lebih awal untuk tampilan pembuka -->
+  <link rel="preload" href="assets/fonts/AwesomeSerif-LightExtraTall.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/Margelin-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/JaneAusten.woff2" as="font" type="font/woff2" crossorigin>
   <!-- Foto mempelai diunduh sejak awal (saat amplop masih tertutup) -->
   <link rel="preload" href="assets/img/gallery/g11.webp" as="image" fetchpriority="high">
   <link rel="preload" href="assets/img/groom-placeholder.webp" as="image" fetchpriority="high">
@@ -69,6 +70,16 @@
     <img class="music__disc music__disc--playing" src="assets/img/music-playing.webp" alt="">
   </button>
   <audio id="bgm" preload="none" loop></audio>
+
+  <!-- Detail foto galeri (frame "OUR GALLERY - Full") -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Foto galeri" hidden>
+    <button class="lightbox__close" type="button" aria-label="Tutup"></button>
+    <figure class="lightbox__stage">
+      <img class="lightbox__img" alt="">
+      <button class="lightbox__nav lightbox__nav--prev" type="button" aria-label="Foto sebelumnya"><img src="assets/img/arrow-left.svg" alt=""></button>
+      <button class="lightbox__nav lightbox__nav--next" type="button" aria-label="Foto berikutnya"><img src="assets/img/arrow-right.svg" alt=""></button>
+    </figure>
+  </div>
 
   <main class="page" id="page">
 
@@ -141,8 +152,8 @@
         </div>
         <img class="mempelai__ribbon mempelai__ribbon--1" data-sway src="assets/img/ribbon-right.webp" alt="">
         <div class="mempelai__person mempelai__person--1">
-          <p class="mempelai__name gt" data-reveal="up">Azie Melasari, S.Kom</p>
-          <p class="mempelai__parents" data-reveal="up">Putri dari Bapak Rustamaji &amp; Ibu Tina Susanti</p>
+          <p class="mempelai__name gt" data-reveal="up">Azie Melasari, S.Kom.</p>
+          <p class="mempelai__parents" data-reveal="up">Putri dari Bapak Rustamaji<br/>&amp; Ibu Tina Susanti</p>
         </div>
 
         <div class="mempelai__amp" data-reveal="amp"><span class="gt">&amp;</span></div>
@@ -158,8 +169,8 @@
         </div>
         <img class="mempelai__ribbon mempelai__ribbon--2" data-sway src="assets/img/ribbon-right.webp" alt="">
         <div class="mempelai__person mempelai__person--2">
-          <p class="mempelai__name gt" data-reveal="up">Dr. Rizky Hari Fernanda, S.Ked</p>
-          <p class="mempelai__parents" data-reveal="up">Putra dari Bapak Haryono &amp; Ibu Suryani</p>
+          <p class="mempelai__name gt" data-reveal="up">dr. Rizky Hari Fernanda.</p>
+          <p class="mempelai__parents" data-reveal="up">Putra dari <br/>Bapak Haryono, S.E. <br/>&amp; Ibu Suryani</p>
         </div>
       </div>
       <div class="d dw mempelai__leaves"><img data-parallax="-0.08" data-leaf-sway src="assets/img/lily-right-leaves.webp" alt=""></div>
@@ -190,7 +201,7 @@
             </div>
           </div>
 
-          <img class="acara__divider" src="assets/img/divider-line.svg" alt="" data-reveal="line">
+          <img class="acara__divider" src="assets/img/acara-divider.svg" alt="" data-reveal="line">
 
           <div class="event">
             <div class="event__head">
@@ -316,7 +327,6 @@
 
       <div class="gallery__controls" data-reveal="up">
         <button class="circle-btn" id="galleryPrev" type="button" aria-label="Foto sebelumnya"><img src="assets/img/arrow-left.svg" alt=""></button>
-        <div class="gallery__progress"><span id="galleryThumb"></span></div>
         <button class="circle-btn" id="galleryNext" type="button" aria-label="Foto berikutnya"><img src="assets/img/arrow-right.svg" alt=""></button>
       </div>
     </section>
@@ -444,7 +454,7 @@
           <div class="gift__block">
             <p class="tag" data-reveal="up">Kirim hadiah</p>
             <div class="address" data-reveal="up">
-              <p class="address__text" id="giftAddress">Perumahan Puri Pradana, No. A26, Blukukan Satu, Tohudan, Kec. Colomadu, Kabupaten Karanganyar, Jawa Tengah 57174. (Azie Melasari)</p>
+              <p class="address__text" id="giftAddress">Perumahan Puri Pradana, No. A26, Blulukan Satu, Tohudan, Kec. Colomadu, Kabupaten Karanganyar, Jawa Tengah 57174. (Azie Melasari)</p>
               <button class="copy-btn" type="button" data-copy-target="giftAddress" aria-label="Salin alamat"></button>
             </div>
           </div>
@@ -462,16 +472,17 @@
         <img class="footer__monogram" src="assets/img/monogram.svg" alt="AR">
         <p class="footer__date gt">17 · 01 · 2027</p>
       </div>
+      <!-- penutup paling bawah: tampil langsung, tanpa animasi -->
       <div class="footer__closing">
-        <p class="footer__thanks" data-reveal="up">Terima kasih telah menjadi bagian dari cerita kami,<br>sampai bertemu di hari bahagia besok!</p>
-        <img class="footer__divider" src="assets/img/footer-divider.svg" alt="" data-reveal="line">
+        <p class="footer__thanks">Terima kasih telah menjadi bagian dari cerita kami,<br>sampai bertemu di hari bahagia besok!</p>
+        <img class="footer__divider" src="assets/img/footer-divider.svg" alt="">
         <div class="footer__sign">
-          <p class="footer__kami" data-reveal="up">Kami yang berbahagia</p>
-          <div class="names names--footer" data-reveal="up">
+          <div class="names names--footer">
             <span class="names__word gt">Azie</span>
             <span class="names__amp"><span class="gt">&amp;</span></span>
             <span class="names__word gt">Rizky</span>
           </div>
+          <p class="footer__hashtag">#RizkyForAzie</p>
         </div>
       </div>
     </footer>
