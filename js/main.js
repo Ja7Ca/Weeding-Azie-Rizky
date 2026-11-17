@@ -61,36 +61,39 @@
   }
 
   /* =========================================================
-     HERO — urutan animasi pembuka (mengikuti video referensi)
+     HERO — animasi pembuka, dipecah dua:
+       • teks  : muncul berurutan (saat ada cover, terlihat lewat jendela oval)
+       • flora : daun & bunga tumbuh (saat cover dibuka)
      ========================================================= */
-  function buildHeroTimeline() {
+  const qh = (k) => $(`[data-hero="${k}"]`);
+
+  function buildHeroText() {
+    gsap.set(["overline", "azie", "amp", "rizky", "date", "kepada", "guest", "dots", "scroll"].map(qh), { opacity: 0 });
+    return gsap.timeline({ paused: true, defaults: { ease: "power3.out" } })
+      .fromTo(qh("overline"), { opacity: 0, y: 10, letterSpacing: "0.5em" }, { opacity: 1, y: 0, letterSpacing: "0.2em", duration: 1 }, 0)
+      .fromTo(qh("azie"), { opacity: 0, x: -18, filter: "blur(6px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 1.1 }, 0.3)
+      .fromTo(qh("amp"), { opacity: 0, scale: 0.4, rotate: -90 }, { opacity: 1, scale: 1, rotate: 0, duration: 1, ease: "back.out(1.8)" }, 0.7)
+      .fromTo(qh("rizky"), { opacity: 0, x: 18, filter: "blur(6px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 1.1 }, 0.9)
+      .fromTo(qh("date"), { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.9 }, 1.4)
+      .fromTo(qh("kepada"), { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.9 }, 1.9)
+      .fromTo(qh("guest"), { opacity: 0, clipPath: "inset(0 100% 0 0)" }, { opacity: 1, clipPath: "inset(0 0% 0 0)", duration: 1.4, ease: "power2.inOut" }, 2.1)
+      .fromTo(qh("dots"), { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 1, ease: "power2.inOut" }, 2.7);
+  }
+
+  function buildHeroFlora() {
     const leaves = $$(".hero [data-leaf]");
     const flowers = $$(".hero [data-flower]");
-    const q = (k) => $(`[data-hero="${k}"]`);
-
     gsap.set([...leaves, ...flowers], { opacity: 0 });
-    gsap.set(["overline", "azie", "amp", "rizky", "date", "kepada", "guest", "dots", "scroll"].map(q), { opacity: 0 });
-
-    const tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
-
-    tl.fromTo(leaves,
-      { opacity: 0, scale: 0.82, rotate: (i) => (i % 2 ? 6 : -6) },
-      { opacity: 1, scale: 1, rotate: 0, duration: 1.6, stagger: 0.08 }, 0)
+    return gsap.timeline({ paused: true, defaults: { ease: "power3.out" } })
+      .fromTo(leaves,
+        { opacity: 0, scale: 0.82, rotate: (i) => (i % 2 ? 6 : -6) },
+        { opacity: 1, scale: 1, rotate: 0, duration: 1.6, stagger: 0.08 }, 0)
       .fromTo(flowers,
         { opacity: 0, scale: 0.7, y: 12 },
-        { opacity: 1, scale: 1, y: 0, duration: 1.4, stagger: 0.1, ease: "back.out(1.4)" }, 0.6)
-      .fromTo(q("overline"), { opacity: 0, y: 10, letterSpacing: "0.5em" }, { opacity: 1, y: 0, letterSpacing: "0.2em", duration: 1 }, 1.7)
-      .fromTo(q("azie"), { opacity: 0, x: -18, filter: "blur(6px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 1.1 }, 2.0)
-      .fromTo(q("amp"), { opacity: 0, scale: 0.4, rotate: -90 }, { opacity: 1, scale: 1, rotate: 0, duration: 1, ease: "back.out(1.8)" }, 2.4)
-      .fromTo(q("rizky"), { opacity: 0, x: 18, filter: "blur(6px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 1.1 }, 2.6)
-      .fromTo(q("date"), { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.9 }, 3.1)
-      .fromTo(q("kepada"), { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.9 }, 3.6)
-      .fromTo(q("guest"), { opacity: 0, clipPath: "inset(0 100% 0 0)" }, { opacity: 1, clipPath: "inset(0 0% 0 0)", duration: 1.4, ease: "power2.inOut" }, 3.8)
-      .fromTo(q("dots"), { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 1, ease: "power2.inOut" }, 4.4)
-      .fromTo(q("scroll"), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 1 }, 4.9)
-      .add(startIdleSway, 2.2);
-
-    return tl;
+        { opacity: 1, scale: 1, y: 0, duration: 1.4, stagger: 0.1, ease: "back.out(1.4)" }, 0.4)
+      // "Scroll to open" hero baru muncul setelah cover terbuka (supaya tidak terlihat di jendela oval)
+      .fromTo(qh("scroll"), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 1 }, 2.2)
+      .add(startIdleSway, 1.8);
   }
 
   /* Goyangan kiri-kanan seperti tertiup angin (terus-menerus).
@@ -109,29 +112,200 @@
     $$(".hero [data-leaf]").forEach((el, i) => sway(el, 0.6, 9 + (i % 3) * 1.2, i * 0.7));
   }
 
-  /* =========================================================
-     AMPLOP (placeholder)
-     ========================================================= */
-  const envelope = $("#envelope");
-  let heroTl = null;
-  if (hasGsap) heroTl = buildHeroTimeline();
+  const heroText = hasGsap ? buildHeroText() : null;
+  const heroFlora = hasGsap ? buildHeroFlora() : null;
+  const whenFontsReady = (fn) => {
+    if (document.fonts && document.fonts.ready) Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 1200))]).then(fn);
+    else fn();
+  };
+  // tanpa cover: bunga tumbuh dulu, teks menyusul (seperti versi awal)
+  const playHeroFull = () => {
+    if (heroFlora) heroFlora.play(0);
+    if (heroText) gsap.delayedCall(1.7, () => heroText.play(0));
+  };
 
   function unlockScroll() {
     document.body.classList.remove("is-locked");
     if (lenis) lenis.start();
     if (window.ScrollTrigger) ScrollTrigger.refresh();
   }
+  function lockScroll() {
+    document.body.classList.add("is-locked");
+    if (lenis) lenis.stop();
+  }
+
+  /* =========================================================
+     MUSIK (komponen "Music")
+     ========================================================= */
+  const musicBtn = $("#musicBtn");
+  const audio = $("#bgm");
+  let resumeOnReturn = false;
+  if (CFG.music) audio.src = CFG.music;
+  const songName = [CFG.musicArtist, CFG.musicTitle].filter(Boolean).join(" – ");
+  if (songName) musicBtn.title = songName;  // keterangan saat kursor diarahkan ke tombol
+  // judul lagu di notifikasi pemutar / layar kunci HP
+  if (CFG.music && "mediaSession" in navigator && window.MediaMetadata) {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: CFG.musicTitle || "Musik", artist: CFG.musicArtist || "", album: "The Wedding of Azie & Rizky",
+      artwork: [{ src: "assets/img/music-playing.webp", sizes: "128x128", type: "image/webp" }],
+    });
+  }
+  function setPlaying(on) {
+    musicBtn.classList.toggle("is-playing", on);
+    musicBtn.setAttribute("aria-label", `${on ? "Jeda" : "Putar"} musik${songName ? ": " + songName : ""}`);
+  }
+  /* Browser hanya mengizinkan suara setelah "aktivasi" dari tamu: ketuk, klik, atau tombol
+     keyboard. Swipe (touchmove) & scroll mouse TIDAK termasuk. Jadi bila percobaan pertama
+     ditolak, lagu otomatis diputar pada sentuhan/klik berikutnya di mana pun. */
+  const ACTIVATION = ["pointerup", "touchend", "click", "keydown"];
+  let wantMusic = false;
+  function retryOnActivation(e) {
+    if (!wantMusic || !audio.paused) return;
+    if (e && e.target && e.target.closest && e.target.closest("#musicBtn")) return; // tombol musik mengurus sendiri
+    startMusic();
+  }
+  function startMusic() {
+    if (!CFG.music) return;
+    wantMusic = true;
+    const p = audio.play();
+    if (p && p.then) {
+      p.then(() => {
+        setPlaying(true);
+        ACTIVATION.forEach((ev) => window.removeEventListener(ev, retryOnActivation, true));
+      }).catch(() => {
+        setPlaying(false);
+        ACTIVATION.forEach((ev) => window.addEventListener(ev, retryOnActivation, { capture: true, passive: true }));
+      });
+    } else setPlaying(!audio.paused);
+  }
+  function showMusicButton() {
+    if (!CFG.music) return;
+    musicBtn.hidden = false;
+    if (hasGsap) gsap.from(musicBtn, { opacity: 0, scale: 0.6, duration: 0.8, ease: "back.out(1.6)", clearProps: "transform,opacity" });
+  }
+  musicBtn.addEventListener("click", () => {
+    if (audio.paused) startMusic();
+    else { audio.pause(); setPlaying(false); }
+  });
+  // jeda saat tamu pindah aplikasi/tab, lanjut lagi saat kembali
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && !audio.paused) { audio.pause(); resumeOnReturn = true; }
+    else if (!document.hidden && resumeOnReturn) { resumeOnReturn = false; startMusic(); }
+  });
+
+  /* =========================================================
+     COVER (frame "Hero + Cover")
+     Kertas krem + jendela oval yang pas dengan teks hero; ujung bawah runcing.
+     Swipe up / scroll / ketuk → cover naik, bunga hero tumbuh, musik mulai.
+     ========================================================= */
+  const cover = $("#cover");
+  const paper = $("#coverPaper");
+  const coverCta = $("#coverOpen");
+  const coverBtn = $("#coverBtn");
+  // perangkat ber-mouse: scroll tidak dihitung browser sebagai izin memutar musik → pakai tombol
+  const mouseDevice = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  // Ukuran gambar "Kertas Cover" dalam satuan desain (lebar 390):
+  //   potongan atas 0–740 (pusat oval y=420), potongan bawah 740–981 (sisi panel
+  //   berakhir di y=862, ujung runcing di y=981), isian tengah diulang bila layar lebih tinggi.
+  const PAPER = { ovalY: 420, topH: 740, bottomH: 241, sideInBottom: 122, tipInBottom: 241, ctaY: 727 };
+  let coverOpened = false;
+  let coverHeight = 0;
+
+  function drawCover() {
+    const W = cover.clientWidth || Math.min(window.innerWidth, 430);
+    const s = W / 390;
+    const vh = window.innerHeight;
+    const hc = $(".hero__content").getBoundingClientRect();
+    const cy = (hc.top + window.scrollY + hc.height / 2) / s;   // pusat teks hero (satuan desain)
+    const off = (cy - PAPER.ovalY) * s;                          // geser kertas agar oval pas di teks
+    const topY = off, topEnd = off + PAPER.topH * s;
+    // sisi panel minimal sampai bawah layar; ujung runcing di bawahnya
+    const sideY = Math.max(vh + 2, topY + (PAPER.topH + PAPER.sideInBottom) * s);
+    const bottomY = sideY - PAPER.sideInBottom * s;
+    const px = (v) => `${v}px`;
+    const [cap, mid, top, bottom] = paper.children;
+
+    Object.assign(top.style, { top: px(topY), height: px(PAPER.topH * s) });
+    Object.assign(bottom.style, { top: px(bottomY), height: px(PAPER.bottomH * s) });
+    // isian tengah (bila ada celah antara potongan atas & bawah)
+    Object.assign(mid.style, { top: px(topEnd - 2), height: px(Math.max(0, bottomY - topEnd + 4)), backgroundSize: `100% ${60 * s}px` });
+    // isian atas (bila kertas tergeser ke bawah)
+    Object.assign(cap.style, { top: "0px", height: px(Math.max(0, topY + 2)), backgroundSize: `100% ${18 * s}px` });
+    // posisi "Swipe up | To open" sesuai desain, tapi tetap di dalam layar pada HP pendek
+    coverCta.style.top = px(Math.min(topY + PAPER.ctaY * s, vh - 46 * s));
+    coverBtn.style.top = coverCta.style.top;
+    coverHeight = bottomY + PAPER.tipInBottom * s;
+    paper.style.height = px(coverHeight);
+  }
+
+  function openCover() {
+    if (coverOpened) return;
+    coverOpened = true;
+    startMusic();                                     // gestur tamu = izin memutar audio
+    window.removeEventListener("wheel", onWheel);
+    window.removeEventListener("keydown", onKey);
+    if (!hasGsap) { cover.remove(); unlockScroll(); showMusicButton(); return; }
+    const dist = coverHeight + 40;
+    gsap.to(cover, {
+      y: -dist, duration: 1.6, ease: "power3.inOut",
+      onComplete: () => { cover.remove(); showMusicButton(); },
+    });
+    if (heroFlora) heroFlora.play(0);                 // bunga tumbuh saat sampul terangkat
+    gsap.delayedCall(0.9, unlockScroll);
+  }
+  let nudging = false;
+  function onWheel(e) {
+    if (e.deltaY <= 4) return;
+    if (!mouseDevice) return openCover();
+    // desktop: jangan buka lewat scroll (musik akan ditolak browser) — goyangkan tombolnya sebagai petunjuk
+    if (nudging || !hasGsap) return;
+    nudging = true;
+    gsap.fromTo(coverBtn, { scale: 1 }, { scale: 1.08, duration: 0.18, yoyo: true, repeat: 3, ease: "power1.inOut", clearProps: "transform,translate,scale,rotate", onComplete: () => { nudging = false; } });
+  }
+  function onKey(e) { if (["ArrowDown", "PageDown", " ", "Enter"].includes(e.key)) { e.preventDefault(); openCover(); } }
+
+  function setupCover() {
+    // selalu mulai dari paling atas supaya teks hero tepat di jendela oval
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+    cover.hidden = false;
+    lockScroll();
+    drawCover();
+    // unduh lagu di latar belakang selagi tamu melihat cover, supaya bisa langsung berbunyi
+    if (CFG.music) window.addEventListener("load", () => { audio.preload = "auto"; audio.load(); }, { once: true });
+    whenFontsReady(() => { drawCover(); if (heroText) heroText.play(0); });
+    window.addEventListener("resize", () => { if (!coverOpened) drawCover(); });
+
+    cover.addEventListener("click", openCover);
+    window.addEventListener("wheel", onWheel, { passive: true });
+    window.addEventListener("keydown", onKey);
+    // swipe ke atas: tarik cover sedikit mengikuti jari, lalu buka bila cukup jauh
+    let startY = null;
+    cover.addEventListener("touchstart", (e) => { startY = e.touches[0].clientY; }, { passive: true });
+    cover.addEventListener("touchmove", (e) => {
+      if (startY == null || coverOpened) return;
+      const dy = startY - e.touches[0].clientY;
+      if (hasGsap && dy > 0) gsap.set(cover, { y: -Math.min(dy, 120) * 0.5 });
+      if (dy > 45) openCover();
+    }, { passive: true });
+    cover.addEventListener("touchend", () => {
+      if (!coverOpened && hasGsap) gsap.to(cover, { y: 0, duration: 0.4, ease: "power2.out" });
+      // jari dilepas = aktivasi yang sah → saat inilah lagu diputar setelah swipe up
+      if (coverOpened && audio.paused) startMusic();
+      startY = null;
+    });
+  }
+
+  /* =========================================================
+     AMPLOP (placeholder, nonaktif) — dipertahankan untuk nanti
+     ========================================================= */
+  const envelope = $("#envelope");
 
   function openInvitation() {
     if (envelope.dataset.opened) return;
     envelope.dataset.opened = "1";
-
-    if (!hasGsap) {
-      envelope.remove();
-      unlockScroll();
-      return;
-    }
-
+    startMusic();
+    if (!hasGsap) { envelope.remove(); unlockScroll(); showMusicButton(); return; }
     const seal = $(".envelope__seal");
     seal.style.animation = "none";
     gsap.timeline({ defaults: { ease: "power3.inOut" } })
@@ -142,30 +316,27 @@
       .set(".envelope__flap", { zIndex: 0 })
       .to(".envelope__body", { y: "60vh", opacity: 0, duration: 0.9, ease: "power2.in" }, "+=0.05")
       .to(envelope, { opacity: 0, duration: 0.7 }, "-=0.45")
-      .add(() => { heroTl && heroTl.play(0); }, "-=0.5")
-      .add(() => { envelope.remove(); unlockScroll(); });
+      .add(playHeroFull, "-=0.5")
+      .add(() => { envelope.remove(); unlockScroll(); showMusicButton(); });
   }
 
-  function startWithoutEnvelope() {
+  /* ---------- pilih pembuka sesuai js/config.js ---------- */
+  if (CFG.showCover && params.get("skip") !== "1") {
     envelope.remove();
-    unlockScroll();
-    // tunggu font siap supaya animasi teks hero tidak "meloncat" saat font berganti
-    const play = () => heroTl && heroTl.play(0);
-    if (document.fonts && document.fonts.ready) {
-      Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 1200))]).then(play);
-    } else play();
-  }
-
-  if (CFG.showEnvelope) {
-    // Amplop diaktifkan di js/config.js → tampilkan & tunggu tamu mengetuk
+    setupCover();
+  } else if (CFG.showEnvelope && params.get("skip") !== "1") {
+    cover.remove();
     envelope.hidden = false;
-    document.body.classList.add("is-locked");
+    lockScroll();
     $("#openInvitation").addEventListener("click", openInvitation);
     envelope.addEventListener("click", (e) => { if (e.target === envelope) openInvitation(); });
-    // Lewati amplop dengan ?skip=1 (berguna saat mengedit)
-    if (params.get("skip") === "1") openInvitation();
   } else {
-    startWithoutEnvelope();
+    // tanpa pembuka (atau ?skip=1 saat mengedit): langsung hero
+    cover.remove();
+    envelope.remove();
+    unlockScroll();
+    showMusicButton();
+    whenFontsReady(playHeroFull);
   }
 
   /* =========================================================
@@ -226,39 +397,50 @@
     });
 
 
-    // Love story: section tertahan di layar, chapter berikutnya naik menumpuk kartu sebelumnya
+    // Love story: kartu menempel (CSS sticky); saat kartu berikutnya datang menumpuk,
+    // kartu di bawahnya sedikit mengecil dan meredup. Jarak scroll = tinggi kartu + jarak (±300px).
     (function storyStack() {
-      const cards = $$(".story__card");
-      if (cards.length < 2) return;
-      const next = cards.slice(1);
-      const tilt = [1.2, -1, 0.7]; // kemiringan akhir tiap kartu, seperti tumpukan surat
-
-      gsap.set(next, { visibility: "visible", y: () => window.innerHeight * 0.85, rotate: (i) => tilt[i] * 3 });
-
-      const tl = gsap.timeline({
-        defaults: { ease: "power2.out" },
-        scrollTrigger: {
-          trigger: ".story",
-          start: "center center",
-          end: () => "+=" + window.innerHeight * 0.75 * next.length,
-          pin: true,
-          scrub: 0.8,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        },
+      const items = $$(".story__item");
+      const ribbons = $(".story__ribbons");
+      const stickTop = (el) => parseFloat(getComputedStyle(el).top) || 0;
+      gsap.from(items[0], { opacity: 0, y: 40, duration: 1.2, ease: "power3.out", clearProps: "transform", scrollTrigger: st(items[0], "top 92%") });
+      items.slice(0, -1).forEach((item, i) => {
+        const next = items[i + 1];
+        const card = $(".story__card", item);
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: next,
+            start: "top bottom",
+            end: () => `top ${parseFloat(getComputedStyle(next).top) || 0}px`,
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
+        })
+          .to(card, { scale: 0.94, ease: "none" }, 0)
+          .to($(".story__dim", card), { opacity: 0.45, ease: "none" }, 0);
       });
 
-      next.forEach((card, i) => {
-        const at = i * 1.25;
-        tl.to(card, { y: 0, rotate: tilt[i], duration: 1 }, at);
-        // kartu di bawahnya sedikit mengecil, naik, dan meredup
-        cards.slice(0, i + 1).forEach((prev, j) => {
-          const depth = i + 1 - j;
-          tl.to(prev, { scale: 1 - depth * 0.035, y: -depth * 9, duration: 1 }, at)
-            .to($(".story__dim", prev), { opacity: Math.min(depth * 0.22, 0.55), duration: 1 }, at);
-        });
+      // Pita menempel pada kartu paling depan yang sudah menempel, lalu bergeser pelan
+      // (maks. 12px) ke posisi kartu berikutnya saat kartu itu datang.
+      const stack = $(".story__stack");
+      function placeRibbons() {
+        const stackTop = stack.getBoundingClientRect().top;
+        const vh = window.innerHeight;
+        let front = items[0], extra = 0;
+        for (let k = 1; k < items.length; k++) {
+          const top = stickTop(items[k]);
+          const d = items[k].getBoundingClientRect().top - top;          // jarak ke posisi menempel
+          const p = Math.min(1, Math.max(0, 1 - d / Math.max(1, vh - top)));
+          if (p >= 0.999) { front = items[k]; extra = 0; }
+          else { extra = (top - stickTop(front)) * p; break; }
+        }
+        gsap.set(ribbons, { y: front.getBoundingClientRect().top - stackTop + extra });
+      }
+      ScrollTrigger.create({
+        trigger: stack, start: "top bottom", end: "bottom top",
+        onUpdate: placeRibbons, onRefresh: placeRibbons,
       });
-      tl.to({}, { duration: 0.35 }); // jeda sebentar di chapter terakhir sebelum lanjut
+      placeRibbons();
     })();
 
     // Galeri: foto masuk satu per satu
@@ -271,7 +453,9 @@
     // Ornamen bunga & daun di tiap section: muncul + bergoyang
     $$("section [data-sway], section [data-leaf-sway]").forEach((el, i) => {
       gsap.from(el, { opacity: 0, scale: 0.8, duration: 1.4, ease: "power3.out", scrollTrigger: st(el, "top 95%") });
-      sway(el, el.hasAttribute("data-leaf-sway") ? 0.6 : 1.3, 7.5 + (i % 4) * 0.8, (i % 5) * 0.5);
+      // hembusan angin tipis: cukup terasa (±2–2.6° bunga, ±1.3° daun) tapi tetap pelan & lembut
+      const leaf = el.hasAttribute("data-leaf-sway");
+      sway(el, leaf ? 1.3 : 2 + (i % 3) * 0.3, 5.5 + (i % 4) * 0.7, (i % 5) * 0.45, leaf ? 0.8 : 1.2);
     });
 
     if (!reduceMotion) $$("[data-parallax]").forEach((el) => {
@@ -295,7 +479,6 @@
   }
 
   if (hasGsap && window.ScrollTrigger) setupScrollAnimations();
-  else $(".story").classList.add("is-static"); // tanpa animasi: chapter ditampilkan berurutan
 
   /* =========================================================
      GALERI — geser, panah, progress bar
@@ -382,7 +565,6 @@
     const nameInput = $("#rsvpName");
     const numEl = $("#countValue");
     const done = $("#rsvpDone");
-    const doneText = $("#rsvpDoneText");
     const max = CFG.maxGuests || 10;
     const storeKey = `rsvp:${guestName.toLowerCase()}`;
     let count = 1;
@@ -396,21 +578,44 @@
     $("#countPlus").addEventListener("click", () => { if (count < max) { count++; render(); } });
     $("#countMinus").addEventListener("click", () => { if (count > 1) { count--; render(); } });
 
-    function showDone(status, jumlah) {
-      doneText.textContent = status === "Hadir"
-        ? `Terima kasih! Kami menantikan kehadiran ${jumlah} orang dari ${guestName === CFG.defaultGuest ? "Anda" : guestName}.`
-        : "Terima kasih atas kabarnya. Doa terbaikmu sudah lebih dari cukup bagi kami.";
+    const titleEl = $("#rsvpTitle");
+    const descEl = $("#rsvpDesc");
+    const badge = $("#rsvpBadge");
+    const original = { title: titleEl.textContent, desc: descEl.textContent };
+
+    function swapIn(els) {
+      if (hasGsap) gsap.fromTo(els, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", stagger: 0.08, clearProps: "transform" });
+    }
+
+    function showDone(status, jumlah, animate = true) {
+      const who = guestFromUrl || (nameInput.value.trim() || "");
+      if (status === "Hadir") {
+        titleEl.textContent = "See you there!";
+        descEl.textContent = who ? `Thank you, ${who}! Sampai jumpa di hari bahagia kami.` : "Thank you! Sampai jumpa di hari bahagia kami.";
+        badge.className = "rsvp-badge rsvp-badge--yes";
+        badge.innerHTML = '<img src="assets/img/icon-check.svg" alt=""><span></span>';
+        $("span", badge).textContent = `Hadir · ${jumlah} orang`;
+      } else {
+        titleEl.textContent = "We'll miss you";
+        descEl.textContent = "Thank you for letting us know. Doa baikmu tetap berarti untuk kami.";
+        badge.className = "rsvp-badge rsvp-badge--no";
+        badge.textContent = "Berhalangan hadir";
+      }
       form.hidden = true;
       done.hidden = false;
-      if (hasGsap) gsap.from(done, { opacity: 0, y: 16, duration: 0.8, ease: "power3.out" });
+      if (animate) swapIn([titleEl, descEl, badge, $("#rsvpChange")]);
+      if (window.ScrollTrigger) ScrollTrigger.refresh();
     }
 
     const saved = (() => { try { return JSON.parse(localStorage.getItem(storeKey)); } catch { return null; } })();
-    if (saved) showDone(saved.status, saved.jumlah);
+    if (saved) showDone(saved.status, saved.jumlah, false);
 
     $("#rsvpChange").addEventListener("click", () => {
+      titleEl.textContent = original.title;
+      descEl.textContent = original.desc;
       done.hidden = true; form.hidden = false;
-      if (hasGsap) gsap.from(form, { opacity: 0, y: 16, duration: 0.6 });
+      swapIn([titleEl, descEl, form]);
+      if (window.ScrollTrigger) ScrollTrigger.refresh();
     });
 
     // e.submitter belum didukung Safari lama -> catat tombol yang diklik

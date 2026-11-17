@@ -14,3 +14,6 @@ desktop.ini
 .vscode/
 .idea/
 *.log
+
+# Ekspor manual dari Figma (sumber, bukan untuk website)
+design/

@@ -28,4 +28,3 @@ Kuota Figma MCP (paket Starter) habis sebelum layer berikut sempat diekspor. Eks
 - [ ] **"Pink Bellflower Group 1"** (pojok kanan bawah section Mempelai)
 - [ ] **"White Poppy Flower Group 2"** dan **"Mask group" (Bell Flower Cluster)** di section Tanda Kasih
 - [ ] File font: Awesome Serif, Margelin, JaneAusten (lihat `css/fonts.css`)
-- [ ] Desain amplop final. Yang sekarang masih placeholder.

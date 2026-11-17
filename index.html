@@ -45,6 +45,31 @@
     <p class="envelope__hint">Ketuk untuk membuka</p>
   </div>
 
+  <!-- ============ COVER (desain "Hero + Cover") ============
+       Kertas krem dengan jendela oval yang memperlihatkan teks hero di belakangnya.
+       Swipe up / scroll / ketuk → cover naik dan hero terbuka penuh. -->
+  <div class="cover" id="cover" hidden>
+    <!-- gambar "Kertas Cover" dari Figma, dipotong 3 bagian (+ isian) supaya pas di semua tinggi layar -->
+    <div class="cover__paper" id="coverPaper" aria-hidden="true">
+      <i class="cover__cap"></i>
+      <i class="cover__mid"></i>
+      <i class="cover__top"></i>
+      <i class="cover__bottom"></i>
+    </div>
+    <button class="cover__cta" id="coverOpen" type="button" aria-label="Buka undangan">
+      <span>Swipe up</span><i></i><span>to open</span>
+    </button>
+    <!-- Desktop: scroll mouse tidak diizinkan browser untuk memutar musik, jadi pakai tombol -->
+    <button class="cover__btn" id="coverBtn" type="button">Buka Undangan</button>
+  </div>
+
+  <!-- Tombol musik (komponen "Music") -->
+  <button class="music" id="musicBtn" type="button" aria-label="Putar musik" hidden>
+    <img class="music__disc music__disc--paused" src="assets/img/music-paused.webp" alt="">
+    <img class="music__disc music__disc--playing" src="assets/img/music-playing.webp" alt="">
+  </button>
+  <audio id="bgm" preload="none" loop></audio>
+
   <main class="page" id="page">
 
     <!-- ============ HERO ============ -->
@@ -137,7 +162,7 @@
           <p class="mempelai__parents" data-reveal="up">Putra dari Bapak Haryono &amp; Ibu Suryani</p>
         </div>
       </div>
-      <div class="d dw mempelai__leaves"><img data-parallax="-0.08" src="assets/img/lily-right-leaves.webp" alt=""></div>
+      <div class="d dw mempelai__leaves"><img data-parallax="-0.08" data-leaf-sway src="assets/img/lily-right-leaves.webp" alt=""></div>
     </section>
 
     <!-- ============ ACARA ============ -->
@@ -200,55 +225,67 @@
         <p class="overline-sm" data-reveal="up">Love Story</p>
         <h2 class="section-title gt" data-reveal="up">Four chapters,<br>twelve years.</h2>
       </div>
-      <!-- Empat chapter ditumpuk; saat di-scroll, chapter berikutnya naik menutupi yang sebelumnya -->
-      <div class="story__stack" data-reveal="card">
-        <article class="story__card" data-chapter="0">
-          <div class="story__texture"></div>
-          <span class="story__inner-border"></span>
-          <div class="story__sparkles" aria-hidden="true"></div>
-          <div class="chapter">
-            <div class="chapter__meta"><span>CHAPTER ONE</span><i></i><span>2015</span></div>
-            <h3 class="chapter__title gt">The Corridor</h3>
-            <p class="chapter__text">Kami pertama kali saling mengenal di sebuah SMA di Sragen, meski berbeda kelas. Pada 2016, jalan kami berpisah.</p>
-          </div>
-          <span class="story__dim"></span>
-        </article>
-        <article class="story__card" data-chapter="1">
-          <div class="story__texture"></div>
-          <span class="story__inner-border"></span>
-          <div class="story__sparkles" aria-hidden="true"></div>
-          <div class="chapter">
-            <div class="chapter__meta"><span>CHAPTER TWO</span><i></i><span>2016 – 2025</span></div>
-            <h3 class="chapter__title gt">A Café in Solo</h3>
-            <p class="chapter__text">Hampir sepuluh tahun kami menempuh pendidikan dan menata masa depan masing-masing. Hingga pada 2025, kami dipertemukan kembali di sebuah kafe di Solo dan sepakat melanjutkan kisah yang sempat terhenti.</p>
-          </div>
-          <span class="story__dim"></span>
-        </article>
-        <article class="story__card" data-chapter="2">
-          <div class="story__texture"></div>
-          <span class="story__inner-border"></span>
-          <div class="story__sparkles" aria-hidden="true"></div>
-          <div class="chapter">
-            <div class="chapter__meta"><span>CHAPTER THREE</span><i></i><span>2026</span></div>
-            <h3 class="chapter__title gt">The Engagement</h3>
-            <p class="chapter__text">Sebagai langkah menuju jenjang yang lebih serius, kami melangsungkan pertunangan pada 29 Maret 2026.</p>
-          </div>
-          <span class="story__dim"></span>
-        </article>
-        <article class="story__card" data-chapter="3">
-          <div class="story__texture"></div>
-          <span class="story__inner-border"></span>
-          <div class="story__sparkles" aria-hidden="true"></div>
-          <div class="chapter">
-            <div class="chapter__meta"><span>A NEW CHAPTER</span><i></i><span>2027</span></div>
-            <h3 class="chapter__title gt">Home</h3>
-            <p class="chapter__text">Dengan penuh rasa syukur kepada Allah SWT, kami akan mengikat janji suci pernikahan pada 15 Januari 2027. Semoga menjadi awal keluarga yang sakinah, mawaddah, warahmah. Aamiin</p>
-          </div>
-          <span class="story__dim"></span>
-        </article>
+      <!-- Empat chapter tersusun ke bawah (frame "love story - Full"); saat di-scroll tiap kartu
+           menempel lalu kartu berikutnya menumpuk di atasnya -->
+      <div class="story__stack">
+        <!-- pita emas: lapisan terpisah yang ikut menempel, selalu di atas semua kartu -->
+        <div class="story__ribbons" aria-hidden="true">
+          <img class="story__ribbon story__ribbon--l" data-sway src="assets/img/ribbon-left.webp" alt="">
+          <img class="story__ribbon story__ribbon--r" data-sway src="assets/img/ribbon-right.webp" alt="">
+        </div>
+        <div class="story__item" style="--i:0">
+          <article class="story__card" data-chapter="0">
+            <div class="story__texture"></div>
+            <span class="story__inner-border"></span>
+            <div class="story__sparkles" aria-hidden="true"></div>
+            <div class="chapter">
+              <div class="chapter__meta"><span>CHAPTER ONE</span><i></i><span>2015</span></div>
+              <h3 class="chapter__title gt">The Corridor</h3>
+              <p class="chapter__text">Kami pertama kali saling mengenal di sebuah SMA di Sragen, meski berbeda kelas. Pada 2016, jalan kami berpisah.</p>
+            </div>
+            <span class="story__dim"></span>
+          </article>
+        </div>
+        <div class="story__item" style="--i:1">
+          <article class="story__card" data-chapter="1">
+            <div class="story__texture"></div>
+            <span class="story__inner-border"></span>
+            <div class="story__sparkles" aria-hidden="true"></div>
+            <div class="chapter">
+              <div class="chapter__meta"><span>CHAPTER TWO</span><i></i><span>2016 – 2025</span></div>
+              <h3 class="chapter__title gt">A Café in Solo</h3>
+              <p class="chapter__text">Hampir sepuluh tahun kami menempuh pendidikan dan menata masa depan masing-masing. Hingga pada 2025, kami dipertemukan kembali di sebuah kafe di Solo dan sepakat melanjutkan kisah yang sempat terhenti.</p>
+            </div>
+            <span class="story__dim"></span>
+          </article>
+        </div>
+        <div class="story__item" style="--i:2">
+          <article class="story__card" data-chapter="2">
+            <div class="story__texture"></div>
+            <span class="story__inner-border"></span>
+            <div class="story__sparkles" aria-hidden="true"></div>
+            <div class="chapter">
+              <div class="chapter__meta"><span>CHAPTER THREE</span><i></i><span>2026</span></div>
+              <h3 class="chapter__title gt">The Engagement</h3>
+              <p class="chapter__text">Sebagai langkah menuju jenjang yang lebih serius, kami melangsungkan pertunangan pada 29 Maret 2026.</p>
+            </div>
+            <span class="story__dim"></span>
+          </article>
+        </div>
+        <div class="story__item" style="--i:3">
+          <article class="story__card" data-chapter="3">
+            <div class="story__texture"></div>
+            <span class="story__inner-border"></span>
+            <div class="story__sparkles" aria-hidden="true"></div>
+            <div class="chapter">
+              <div class="chapter__meta"><span>A NEW CHAPTER</span><i></i><span>2027</span></div>
+              <h3 class="chapter__title gt">Home</h3>
+              <p class="chapter__text">Dengan penuh rasa syukur kepada Allah SWT, kami akan mengikat janji suci pernikahan pada 15 Januari 2027. Semoga menjadi awal keluarga yang sakinah, mawaddah, warahmah. Aamiin</p>
+            </div>
+            <span class="story__dim"></span>
+          </article>
+        </div>
       </div>
-      <img class="story__ribbon story__ribbon--l" data-sway src="assets/img/ribbon-left.webp" alt="">
-      <img class="story__ribbon story__ribbon--r" data-sway src="assets/img/ribbon-right.webp" alt="">
     </section>
 
     <!-- ============ GALLERY ============ -->
@@ -307,8 +344,8 @@
         <div class="rsvp__content">
           <div class="section-head">
             <p class="overline-sm" data-reveal="up">Konfirmasi Kehadiran</p>
-            <h2 class="section-title gt" data-reveal="up">Will you join us?</h2>
-            <p class="section-desc" data-reveal="up">Kehadiranmu berarti besar bagi kami. Cukup satu ketukan di bawah ini tanpa ribet, tanpa perlu mengetik apa pun.</p>
+            <h2 class="section-title gt" id="rsvpTitle" data-reveal="up">Will you join us?</h2>
+            <p class="section-desc" id="rsvpDesc" data-reveal="up">Kehadiranmu berarti besar bagi kami. Cukup satu ketukan di bawah ini tanpa ribet, tanpa perlu mengetik apa pun.</p>
           </div>
 
           <form class="rsvp__form" id="rsvpForm" novalidate>
@@ -317,13 +354,13 @@
             <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
 
             <div class="counter" data-reveal="up">
-              <button class="circle-btn" type="button" id="countPlus" aria-label="Tambah jumlah orang"><img src="assets/img/icon-plus.svg" alt=""></button>
+              <button class="circle-btn" type="button" id="countMinus" aria-label="Kurangi jumlah orang"><img src="assets/img/icon-minus.svg" alt=""></button>
               <div class="counter__value gt-wrap">
                 <span class="gt">Hadir</span>
                 <span class="counter__num gt" id="countValue">1</span>
                 <span class="gt">orang</span>
               </div>
-              <button class="circle-btn" type="button" id="countMinus" aria-label="Kurangi jumlah orang"><img src="assets/img/icon-minus.svg" alt=""></button>
+              <button class="circle-btn" type="button" id="countPlus" aria-label="Tambah jumlah orang"><img src="assets/img/icon-plus.svg" alt=""></button>
             </div>
 
             <div class="rsvp__actions" data-reveal="up">
@@ -332,8 +369,9 @@
             </div>
           </form>
 
+          <!-- Status setelah konfirmasi (frame "Konfirmasi Kehadiran - hadir / tidak hadir") -->
           <div class="rsvp__done" id="rsvpDone" hidden>
-            <p class="rsvp__done-text" id="rsvpDoneText"></p>
+            <p class="rsvp-badge" id="rsvpBadge"></p>
             <button class="rsvp__change" type="button" id="rsvpChange">Ubah jawaban</button>
           </div>
         </div>
