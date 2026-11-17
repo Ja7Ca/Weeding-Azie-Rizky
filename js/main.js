@@ -223,9 +223,12 @@
     const sideY = Math.max(vh + 2, topY + (PAPER.topH + PAPER.sideInBottom) * s);
     const bottomY = sideY - PAPER.sideInBottom * s;
     const px = (v) => `${v}px`;
-    const [cap, mid, top, bottom] = paper.children;
+    const [cap, mid, top, head, bottom] = paper.children;
 
     Object.assign(top.style, { top: px(topY), height: px(PAPER.topH * s) });
+    // HP pendek: kertas tergeser naik agar oval pas dengan teks → garis bingkai atas akan terpotong.
+    // Tepi atas (0–38) dipasang tetap di paling atas; selisihnya terserap di area polos di bawahnya.
+    Object.assign(head.style, { top: "0px", height: px(topY < 0 ? 38 * s : 0) });
     Object.assign(bottom.style, { top: px(bottomY), height: px(PAPER.bottomH * s) });
     // isian tengah (bila ada celah antara potongan atas & bawah)
     Object.assign(mid.style, { top: px(topEnd - 2), height: px(Math.max(0, bottomY - topEnd + 4)), backgroundSize: `100% ${60 * s}px` });

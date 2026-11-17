@@ -963,6 +963,8 @@ section, footer { position: relative; }
 .cover__paper { position: absolute; left: 0; top: 0; width: 100%; pointer-events: none; }
 .cover__paper i { position: absolute; left: 0; width: 100%; display: block; background-repeat: no-repeat; background-size: 100% auto; }
 .cover__top    { background-image: url("../assets/img/cover-top.webp"); }
+/* tepi atas kertas (dengan garis bingkai) — selalu di paling atas layar pada HP pendek */
+.cover__head   { background-image: url("../assets/img/cover-top.webp"); background-position: top center; }
 .cover__bottom { background-image: url("../assets/img/cover-bottom.webp"); }
 .cover__mid    { background-image: url("../assets/img/cover-mid.webp");  background-repeat: repeat-y !important; }
 .cover__cap    { background-image: url("../assets/img/cover-cap.webp");  background-repeat: repeat-y !important; }
