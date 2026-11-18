@@ -24,5 +24,4 @@ Lalu buka:
 
 ## Masih perlu dilengkapi
 Kuota Figma MCP (paket Starter) habis sebelum layer berikut sempat diekspor. Ekspor manual dari Figma sebagai PNG @2x, lalu kirimkan:
-- [ ] Foto mempelai pria: layer **"REYY0590 3"** di section Mempelai. Saat ini memakai potongan screenshot beresolusi rendah (`assets/img/groom-placeholder.webp`).
 - [ ] **"Pink Bellflower Group 1"** (pojok kanan bawah section Mempelai)

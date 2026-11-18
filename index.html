@@ -18,8 +18,8 @@
   <link rel="preload" href="assets/fonts/Margelin-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/JaneAusten.woff2" as="font" type="font/woff2" crossorigin>
   <!-- Foto mempelai diunduh sejak awal (saat amplop masih tertutup) -->
-  <link rel="preload" href="assets/img/gallery/g11.webp" as="image" fetchpriority="high">
-  <link rel="preload" href="assets/img/groom-placeholder.webp" as="image" fetchpriority="high">
+  <link rel="preload" href="assets/img/bride.webp" as="image" fetchpriority="high">
+  <link rel="preload" href="assets/img/groom.webp" as="image" fetchpriority="high">
   <link rel="stylesheet" href="css/fallback-fonts.css">
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/style.css">
@@ -153,7 +153,7 @@
           <img class="oval__ring1" src="assets/img/oval-ring-1.svg" alt="">
           <img class="oval__ring2" src="assets/img/oval-ring-2.svg" alt="">
           <img class="oval__ring3" src="assets/img/oval-ring-3.svg" alt="">
-          <div class="oval__photo"><img class="bride-photo" src="assets/img/gallery/g11.webp" alt="Azie Melasari"></div>
+          <div class="oval__photo"><img class="bride-photo" src="assets/img/bride.webp" alt="Azie Melasari"></div>
         </div>
         <img class="mempelai__ribbon mempelai__ribbon--1" data-sway src="assets/img/ribbon-right.webp" alt="">
         <div class="mempelai__person mempelai__person--1">
@@ -170,7 +170,7 @@
           <img class="oval__ring2" src="assets/img/oval-ring-2.svg" alt="">
           <img class="oval__ring3" src="assets/img/oval-ring-3.svg" alt="">
           <!-- TODO: ganti dengan ekspor foto asli (layer "REYY0590 3") -->
-          <div class="oval__photo"><img class="groom-photo" src="assets/img/groom-placeholder.webp" alt="Rizky Hari Fernanda"></div>
+          <div class="oval__photo"><img class="groom-photo" src="assets/img/groom.webp" alt="Rizky Hari Fernanda"></div>
         </div>
         <img class="mempelai__ribbon mempelai__ribbon--2" data-sway src="assets/img/ribbon-right.webp" alt="">
         <div class="mempelai__person mempelai__person--2">
@@ -315,18 +315,18 @@
 
       <div class="gallery__viewport" id="galleryViewport">
         <div class="gallery__track">
-          <figure class="photo photo--tall" style="--r:0deg"><img src="assets/img/gallery/g01.webp" alt="" loading="lazy"></figure>
-          <figure class="photo photo--wide" style="--r:-1deg"><img src="assets/img/gallery/g02.webp" alt="" loading="lazy"></figure>
-          <figure class="photo photo--square" style="--r:-1deg"><img src="assets/img/gallery/g03.webp" alt="" loading="lazy"></figure>
-          <figure class="photo photo--std" style="--r:1deg"><img src="assets/img/gallery/g04.webp" alt="" loading="lazy"></figure>
-          <figure class="photo photo--std" style="--r:-2deg"><img src="assets/img/gallery/g05.webp" alt="" loading="lazy"></figure>
-          <figure class="photo photo--std" style="--r:2deg"><img src="assets/img/gallery/g06.webp" alt="" loading="lazy"></figure>
-          <figure class="photo photo--wide" style="--r:1deg"><img src="assets/img/gallery/g07.webp" alt="" loading="lazy"></figure>
-          <figure class="photo photo--square" style="--r:-1deg"><img src="assets/img/gallery/g08.webp" alt="" loading="lazy"></figure>
-          <figure class="photo photo--std" style="--r:-1deg"><img src="assets/img/gallery/g09.webp" alt="" loading="lazy"></figure>
-          <figure class="photo photo--wide" style="--r:-1deg"><img src="assets/img/gallery/g10.webp" alt="" loading="lazy"></figure>
-          <figure class="photo photo--std" style="--r:0deg"><img src="assets/img/gallery/g11.webp" alt="" loading="lazy"></figure>
-          <figure class="photo photo--wide" style="--r:-1deg"><img src="assets/img/gallery/g12.webp" alt="" loading="lazy"></figure>
+          <figure class="photo photo--tall" style="--r:0deg"><img src="assets/img/gallery/g01.webp" data-full="assets/img/gallery/hd/g01.webp" alt="" loading="lazy"></figure>
+          <figure class="photo photo--wide" style="--r:-1deg"><img src="assets/img/gallery/g02.webp" data-full="assets/img/gallery/hd/g02.webp" alt="" loading="lazy"></figure>
+          <figure class="photo photo--square" style="--r:-1deg"><img src="assets/img/gallery/g03.webp" data-full="assets/img/gallery/hd/g03.webp" alt="" loading="lazy"></figure>
+          <figure class="photo photo--std" style="--r:1deg"><img src="assets/img/gallery/g04.webp" data-full="assets/img/gallery/hd/g04.webp" alt="" loading="lazy"></figure>
+          <figure class="photo photo--std" style="--r:-2deg"><img src="assets/img/gallery/g05.webp" data-full="assets/img/gallery/hd/g05.webp" alt="" loading="lazy"></figure>
+          <figure class="photo photo--std" style="--r:2deg"><img src="assets/img/gallery/g06.webp" data-full="assets/img/gallery/hd/g06.webp" alt="" loading="lazy"></figure>
+          <figure class="photo photo--wide" style="--r:1deg"><img src="assets/img/gallery/g07.webp" data-full="assets/img/gallery/hd/g07.webp" alt="" loading="lazy"></figure>
+          <figure class="photo photo--square" style="--r:-1deg"><img src="assets/img/gallery/g08.webp" data-full="assets/img/gallery/hd/g08.webp" alt="" loading="lazy"></figure>
+          <figure class="photo photo--std" style="--r:-1deg"><img src="assets/img/gallery/g09.webp" data-full="assets/img/gallery/hd/g09.webp" alt="" loading="lazy"></figure>
+          <figure class="photo photo--wide" style="--r:-1deg"><img src="assets/img/gallery/g10.webp" data-full="assets/img/gallery/hd/g10.webp" alt="" loading="lazy"></figure>
+          <figure class="photo photo--std" style="--r:0deg"><img src="assets/img/gallery/g11.webp" data-full="assets/img/gallery/hd/g11.webp" alt="" loading="lazy"></figure>
+          <figure class="photo photo--wide" style="--r:-1deg"><img src="assets/img/gallery/g12.webp" data-full="assets/img/gallery/hd/g12.webp" alt="" loading="lazy"></figure>
         </div>
       </div>
 

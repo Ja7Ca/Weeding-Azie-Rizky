@@ -542,18 +542,57 @@
     /* ---------- lightbox (frame "OUR GALLERY - Full") ---------- */
     const box = $("#lightbox");
     const img = $(".lightbox__img", box);
-    const srcs = photos.map((ph) => $("img", ph).getAttribute("src"));
+    // versi HD khusus tampilan detail (data-full); thumbnail galeri tetap ringan
+    const srcs = photos.map((ph) => { const im = $("img", ph); return im.dataset.full || im.getAttribute("src"); });
     let index = 0, lastFocus = null;
 
+    // Gambar diunduh & di-decode dulu sebelum ditukar, supaya saat fade-in tidak sempat tampil
+    // gambar lama lalu "kedip" ke gambar baru. Ketukan cepat beruntun: hanya foto terakhir yang dipakai.
+    const cache = new Map();
+    // decode() bisa tertahan lama di sebagian browser → dibatasi waktunya, jangan sampai foto macet
+    const decoded = (im, ms) => Promise.race([
+      im.decode ? im.decode().catch(() => {}) : Promise.resolve(),
+      new Promise((r) => setTimeout(r, ms)),
+    ]);
+    function load(k) {
+      const src = srcs[(k + srcs.length) % srcs.length];
+      if (!cache.has(src)) {
+        const im = new Image();
+        const loaded = new Promise((r) => { im.onload = im.onerror = r; });
+        im.src = src;
+        cache.set(src, Promise.race([loaded, new Promise((r) => setTimeout(r, 4000))]).then(() => decoded(im, 400)));
+      }
+      return cache.get(src);
+    }
+    let token = 0;
     function show(i, dir = 0) {
       index = (i + srcs.length) % srcs.length;                          // berputar: setelah terakhir → pertama
-      if (hasGsap && dir) {
-        gsap.timeline()
-          .to(img, { opacity: 0, x: -24 * dir, duration: 0.18, ease: "power1.in" })
-          .add(() => { img.src = srcs[index]; })
-          .fromTo(img, { opacity: 0, x: 24 * dir }, { opacity: 1, x: 0, duration: 0.32, ease: "power2.out" });
-      } else img.src = srcs[index];
+      const src = srcs[index], my = ++token;
       img.alt = `Foto ${index + 1} dari ${srcs.length}`;
+      const ready = load(index);
+      load(index + 1); load(index - 1);                                 // siapkan tetangga
+      if (!hasGsap) { img.src = src; return; }
+      gsap.killTweensOf(img);
+      if (!dir) {
+        // saat dibuka: latar gelap langsung tampil, foto HD muncul begitu siap
+        gsap.set(img, { opacity: 0, x: 0 });
+        ready.then(() => {
+          if (my !== token) return;
+          img.src = src;
+          decoded(img, 150).then(() => {
+            if (my === token) gsap.fromTo(img, { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, duration: 0.45, ease: "power3.out" });
+          });
+        });
+        return;
+      }
+      const out = new Promise((res) => gsap.to(img, { opacity: 0, x: -24 * dir, duration: 0.18, ease: "power1.in", onComplete: res }));
+      Promise.all([ready, out]).then(() => {
+        if (my !== token) return;                                       // sudah diganti foto lain
+        img.src = src;
+        const fadeIn = () => { if (my === token) gsap.fromTo(img, { opacity: 0, x: 24 * dir }, { opacity: 1, x: 0, duration: 0.32, ease: "power2.out" }); };
+        // tunggu elemen <img> sendiri siap menggambar gambar baru
+        decoded(img, 150).then(fadeIn);
+      });
     }
     function open(i) {
       lastFocus = document.activeElement;
@@ -561,10 +600,7 @@
       box.hidden = false;
       document.body.classList.add("is-lightbox");
       if (lenis) lenis.stop();
-      if (hasGsap) {
-        gsap.fromTo(box, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" });
-        gsap.fromTo(img, { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, duration: 0.45, ease: "power3.out" });
-      }
+      if (hasGsap) gsap.fromTo(box, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" });
       $(".lightbox__close", box).focus({ preventScroll: true });
     }
     function close() {
@@ -582,6 +618,7 @@
       ph.setAttribute("role", "button");
       ph.setAttribute("tabindex", "0");
       ph.setAttribute("aria-label", `Lihat foto ${i + 1}`);
+      ph.addEventListener("pointerdown", () => load(i), { passive: true });   // mulai unduh HD lebih awal
       ph.addEventListener("click", () => open(i));
       ph.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(i); } });
     });
