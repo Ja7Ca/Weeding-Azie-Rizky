@@ -460,7 +460,7 @@ section, footer { position: relative; }
 /* =========================================================
    ACARA
    ========================================================= */
-.acara { height: calc(1030 * var(--s)); }
+.acara { height: calc(1030 * var(--s)); z-index: 1; } /* bunga yang menjulur ke bawah tetap di atas latar diam Love Story */
 .acara__card {
   position: absolute; left: 50%; top: calc(51 * var(--s)); translate: -50% 0;
   width: calc(358 * var(--s)); height: calc(928 * var(--s));
@@ -544,6 +544,20 @@ section, footer { position: relative; }
   padding: calc(56 * var(--s)) 0 calc(46 * var(--s));
   /* posisi kartu saat menempel: kira-kira di tengah layar (dipakai judul & kartu) */
   --stick: calc(50vh - 150 * var(--s)); /* fallback browser lama */
+  isolation: isolate;
+}
+/* Latar diam: lapisan position:fixed yang dipotong (clip-path) hanya sebatas section ini.
+   Tidak memakai background-attachment:fixed karena Safari iOS mengabaikannya. */
+.story__bg {
+  position: absolute; inset: 0; z-index: 0;
+  clip-path: inset(0);
+  pointer-events: none;
+}
+.story__bg i {
+  position: fixed; top: 0; left: 50%; translate: -50% 0;
+  width: min(100vw, 430px);
+  height: 100vh; height: 100lvh;
+  background: var(--maroon) url("../assets/img/bg-texture.webp") center top / calc(472.24 * var(--s)) calc(844 * var(--s)) repeat-y;
 }
 /* Judul ikut menempel di atas tumpukan kartu, dan "lepas" tepat bersamaan dengan kartu terdepan:
    margin-bawah besar (339 = 24 jarak + 279 kartu + 36 offset tumpukan) membuat batas lepasnya sama
