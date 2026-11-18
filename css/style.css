@@ -999,6 +999,9 @@ section, footer { position: relative; }
 .cover__actions .cover__btn { pointer-events: auto; }
 /* pengukur tinggi area status bar / notch (env safe-area) */
 .cover__safe { position: absolute; top: 0; left: 0; width: 0; height: env(safe-area-inset-top, 0px); pointer-events: none; }
+/* pengukur area layar yang benar-benar terlihat saat toolbar browser tampil (svh).
+   Chrome iOS melaporkan innerHeight termasuk area di balik toolbar bawahnya. */
+.cover__svh { position: absolute; top: 0; left: 0; width: 0; height: 100vh; height: 100svh; pointer-events: none; }
 .cover__btn {
   position: relative;
   display: none; align-items: center; justify-content: center;
