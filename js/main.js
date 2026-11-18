@@ -206,6 +206,7 @@
   const coverBtn = $("#coverBtn");
   const coverActions = $("#coverActions");
   const coverSafe = $("#coverSafe");
+  const coverSvh = $("#coverSvh");
   // Ukuran gambar "Kertas Cover" dalam satuan desain (lebar 390):
   //   potongan atas 0–740 (pusat oval y=420), potongan bawah 740–981 (sisi panel
   //   berakhir di y=862, ujung runcing di y=981), isian tengah diulang bila layar lebih tinggi.
@@ -241,7 +242,10 @@
     // isian atas (bila kertas tergeser ke bawah)
     Object.assign(cap.style, { top: "0px", height: px(Math.max(0, (needHead ? safeTop : topY) + 2)), backgroundSize: `100% ${18 * s}px` });
     // posisi "Swipe up | To open" sesuai desain, tapi tetap di dalam layar pada HP pendek
-    coverCta.style.top = px(Math.min(topY + PAPER.ctaY * s, vh - 46 * s));
+    // batas bawah area yang PASTI terlihat (Chrome iOS: toolbar bawah menutupi sebagian innerHeight)
+    const seen = Math.min(vh, coverSvh.getBoundingClientRect().height || vh,
+      window.visualViewport ? window.visualViewport.height : vh);
+    coverCta.style.top = px(Math.min(topY + PAPER.ctaY * s, seen - 28 * s)); // tombol berakhir 10px di atas tepi terlihat
     coverActions.style.top = px(parseFloat(coverCta.style.top) - 18 * s); // pusat tombol (tinggi 36) di posisi ajakan
     coverHeight = bottomY + PAPER.tipInBottom * s;
     paper.style.height = px(coverHeight);
