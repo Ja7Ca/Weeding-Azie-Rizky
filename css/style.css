@@ -407,8 +407,8 @@ section, footer { position: relative; }
   isolation: isolate;
 }
 .oval__photo img { position: absolute; }
-.bride-photo { left: calc(-371.62 * var(--s)); top: calc(-494.12 * var(--s)); width: calc(712.1 * var(--s)); height: calc(1068.41 * var(--s)); }
-.groom-photo { inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* foto sudah dipotong sesuai bingkai oval (ekspor Figma) */
+.bride-photo, .groom-photo { inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
 .mempelai__ribbon { position: absolute; width: calc(19.78 * var(--s)); height: calc(56.43 * var(--s)); transform-origin: 50% 0; }
 .mempelai__ribbon--1 { left: calc(302.88 * var(--s)); top: calc(194 * var(--s)); }
