@@ -25,3 +25,4 @@ Lalu buka:
 ## Masih perlu dilengkapi
 Kuota Figma MCP (paket Starter) habis sebelum layer berikut sempat diekspor. Ekspor manual dari Figma sebagai PNG @2x, lalu kirimkan:
 - [ ] **"Pink Bellflower Group 1"** (pojok kanan bawah section Mempelai)
+- [ ] **"White Poppy Flower Group 2"** dan **"Mask group" (Bell Flower Cluster)** di section Tanda Kasih
